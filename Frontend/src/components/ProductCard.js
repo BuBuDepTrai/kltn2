@@ -104,8 +104,10 @@ const ProductCard = (props) => {
                   edit={false}
                   activeColor="#ffd700"
                 />
+                <p className="price">
+  {item?.price && `${(item.price).toLocaleString('vi-VN')}đ`}
+</p>
 
-                <p className="price">Rs.{item?.price}</p>
               </div>
               <div className="action-bar position-absolute">
                 <div className="d-flex flex-column gap-15">

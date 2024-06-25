@@ -148,27 +148,34 @@ const logout = asyncHandler(async (req, res) => {
 // Update a user
 
 const updatedUser = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  validateMongoDbId(_id);
+  const { id } = req.body; // Assume the user ID is passed in the body
+  validateMongoDbId(id);
 
   try {
+    const user = await User.findById(id);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
-      _id,
+      id,
       {
-        firstname: req?.body?.firstname,
-        lastname: req?.body?.lastname,
-        email: req?.body?.email,
-        mobile: req?.body?.mobile,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        mobile: req.body.mobile,
       },
-      {
-        new: true,
-      }
+      { new: true }
     );
+
     res.json(updatedUser);
   } catch (error) {
-    throw new Error(error);
+    res.status(500);
+    throw new Error(error.message);
   }
 });
+
 
 // save user Address
 
@@ -226,14 +233,20 @@ const deleteaUser = asyncHandler(async (req, res) => {
   validateMongoDbId(id);
 
   try {
-    const deleteaUser = await User.findByIdAndDelete(id);
-    res.json({
-      deleteaUser,
-    });
+    const user = await User.findById(id);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    await User.findByIdAndDelete(id);
+    res.json({ message: "User deleted successfully" });
   } catch (error) {
-    throw new Error(error);
+    res.status(500);
+    throw new Error(error.message);
   }
 });
+
+
 
 const blockUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -429,6 +442,7 @@ const createOrder = asyncHandler(async (req, res) => {
     paymentInfo,
   } = req.body;
   const { _id } = req.user;
+  
   try {
     const order = await Order.create({
       shippingInfo,
@@ -443,9 +457,11 @@ const createOrder = asyncHandler(async (req, res) => {
       success: true,
     });
   } catch (error) {
+    console.error("Error creating order:", error);
     throw new Error(error);
   }
 });
+
 
 const getMyOrders = asyncHandler(async (req, res) => {
   const { _id } = req.user;

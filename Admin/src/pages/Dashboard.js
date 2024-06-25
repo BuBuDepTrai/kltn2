@@ -183,8 +183,9 @@ const Dashboard = () => {
           <div>
             <p className="desc">Total Income</p>
             <h4 className="mb-0 sub-title">
-              Rs.{yearlyDataState && yearlyDataState[0]?.amount}
-            </h4>
+  {yearlyDataState && yearlyDataState[0]?.amount ? (yearlyDataState[0].amount * 300).toLocaleString('vi-VN') : 0}₫
+</h4>
+
           </div>
           <div className="d-flex flex-column align-items-end">
             <p className="mb-0  desc">Income in Last Year from Today</p>

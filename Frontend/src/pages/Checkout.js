@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import { config } from "../utils/axiosConfig";
 import {
   createAnOrder,
   deleteUserCart,
@@ -18,9 +17,9 @@ let shippingSchema = yup.object({
   firstname: yup.string().required("First Name is Required"),
   lastname: yup.string().required("Last Name is Required"),
   address: yup.string().required("Address Details are Required"),
-  state: yup.string().required("S tate is Required"),
-  city: yup.string().required("city is Required"),
-  country: yup.string().required("country is Required"),
+  state: yup.string().required("State is Required"),
+  city: yup.string().required("City is Required"),
+  country: yup.string().required("Country is Required"),
   pincode: yup.number("Pincode No is Required").required().positive().integer(),
 });
 
@@ -30,18 +29,15 @@ const Checkout = () => {
   const authState = useSelector((state) => state?.auth);
   const [totalAmount, setTotalAmount] = useState(null);
   const [shippingInfo, setShippingInfo] = useState(null);
-  const [paymentInfo, setPaymentInfo] = useState({
-    razorpayPaymentId: "",
-    razorpayOrderId: "",
-  });
+  const [paymentMethod, setPaymentMethod] = useState("VNPay");
   const navigate = useNavigate();
 
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < cartState?.length; index++) {
       sum = sum + Number(cartState[index].quantity) * cartState[index].price;
-      setTotalAmount(sum);
     }
+    setTotalAmount(sum);
   }, [cartState]);
 
   const getTokenFromLocalStorage = localStorage.getItem("customer")
@@ -59,18 +55,18 @@ const Checkout = () => {
 
   useEffect(() => {
     dispatch(getUserCart(config2));
-  }, []);
+  }, [dispatch, config2]);
 
   useEffect(() => {
     if (
       authState?.orderedProduct?.order !== null &&
       authState?.orderedProduct?.success === true
     ) {
+      dispatch(deleteUserCart(config2));
+      dispatch(resetState()); // Xóa giỏ hàng sau khi đặt hàng thành công
       navigate("/my-orders");
     }
-  }, [authState]);
-
-  const [cartProductState, setCartProductState] = useState([]);
+  }, [authState, navigate, dispatch, config2]);
 
   const formik = useFormik({
     initialValues: {
@@ -88,110 +84,51 @@ const Checkout = () => {
       setShippingInfo(values);
       localStorage.setItem("address", JSON.stringify(values));
       setTimeout(() => {
-        checkOutHandler();
+        checkOutHandler(values);
       }, 300);
     },
   });
 
-  const loadScript = (src) => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
+  const checkOutHandler = async (shippingInfo) => {
+    try {
+      const result = await axios.post(
+        "http://localhost:5000/api/user/order/checkout",
+        {
+          amount: totalAmount + 100000,
+          orderInfo: "Order from Cart Corner",
+          paymentMethod,
+          shippingInfo,
+          orderItems: cartState.map((item) => ({
+            product: item.productId, // Ensure productId is sent
+            color: item.color,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          totalPrice: totalAmount,
+          totalPriceAfterDiscount: totalAmount + 100000,
+        },
+        config2
+      );
+
+      if (paymentMethod === "COD") {
+        alert("Order placed successfully with Cash on Delivery");
+        dispatch(deleteUserCart(config2)); // Xóa giỏ hàng ngay lập tức
+        dispatch(resetState()); // Reset trạng thái giỏ hàng
+        navigate("/my-orders");
+      } else {
+        if (!result.data || !result.data.vnpUrl) {
+          throw new Error("Invalid response from server");
+        }
+
+        const { vnpUrl } = result.data;
+        window.location.href = vnpUrl;
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("Something Went Wrong: " + (error.response?.data?.message || error.message));
+    }
   };
 
-  useEffect(() => {
-    let items = [];
-    for (let index = 0; index < cartState?.length; index++) {
-      items.push({
-        product: cartState[index].productId._id,
-        quantity: cartState[index].quantity,
-        color: cartState[index].color._id,
-        price: cartState[index].price,
-      });
-    }
-    setCartProductState(items);
-  }, []);
-
-  const checkOutHandler = async () => {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-
-    if (!res) {
-      alert("Razorpay SDK faild to Load");
-      return;
-    }
-    const result = await axios.post(
-      "http://localhost:5000/api/user/order/checkout",
-      { amount: totalAmount + 100 },
-      config
-    );
-
-    if (!result) {
-      alert("Something Went Wrong");
-      return;
-    }
-
-    const { amount, id: order_id, currency } = result.data.order;
-
-    const options = {
-      key: "rzp_test_HSSeDI22muUrLR", // Enter the Key ID generated from the Dashboard
-      amount: amount,
-      currency: currency,
-      name: "Cart's corner",
-      description: "Test Transaction",
-
-      order_id: order_id,
-      handler: async function (response) {
-        const data = {
-          orderCreationId: order_id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpayOrderId: response.razorpay_order_id,
-        };
-
-        const result = await axios.post(
-          "http://localhost:5000/api/user/order/paymentVerification",
-          data,
-          config
-        );
-
-        dispatch(
-          createAnOrder({
-            totalPrice: totalAmount,
-            totalPriceAfterDiscount: totalAmount,
-            orderItems: cartProductState,
-            paymentInfo: result.data,
-            shippingInfo: JSON.parse(localStorage.getItem("address")),
-          })
-        );
-        dispatch(deleteUserCart(config2));
-        localStorage.removeItem("address");
-        dispatch(resetState());
-      },
-      prefill: {
-        name: "Dev Corner",
-        email: "devcorner@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "developer's cornor office",
-      },
-      theme: {
-        color: "#61dafb",
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  };
   return (
     <>
       <Container class1="checkout-wrapper py-5 home-wrapper-2">
@@ -211,7 +148,7 @@ const Checkout = () => {
                   </li>
                   &nbsp; /&nbsp;
                   <li
-                    className="breadcrumb-ite total-price active"
+                    className="breadcrumb-item total-price active"
                     aria-current="page"
                   >
                     Information
@@ -236,22 +173,20 @@ const Checkout = () => {
               <h4 className="mb-3">Shipping Address</h4>
               <form
                 onSubmit={formik.handleSubmit}
-                action=""
                 className="d-flex gap-15 flex-wrap justify-content-between"
               >
                 <div className="w-100">
                   <select
                     className="form-control form-select"
-                    id=""
                     name="country"
                     value={formik.values.country}
-                    onChange={formik.handleChange("country")}
-                    onBlur={formik.handleChange("country")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   >
                     <option value="" selected disabled>
                       Select Country
                     </option>
-                    <option value="India">India</option>
+                    <option value="VietNam">VietNam</option>
                   </select>
                   <div className="error ms-2 my-1">
                     {formik.touched.country && formik.errors.country}
@@ -264,8 +199,8 @@ const Checkout = () => {
                     className="form-control"
                     name="firstname"
                     value={formik.values.firstname}
-                    onChange={formik.handleChange("firstname")}
-                    onBlur={formik.handleBlur("firstname")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <div className="error ms-2 my-1">
                     {formik.touched.firstname && formik.errors.firstname}
@@ -278,8 +213,8 @@ const Checkout = () => {
                     className="form-control"
                     name="lastname"
                     value={formik.values.lastname}
-                    onChange={formik.handleChange("lastname")}
-                    onBlur={formik.handleBlur("lastname")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <div className="error ms-2 my-1">
                     {formik.touched.lastname && formik.errors.lastname}
@@ -292,8 +227,8 @@ const Checkout = () => {
                     className="form-control"
                     name="address"
                     value={formik.values.address}
-                    onChange={formik.handleChange("address")}
-                    onBlur={formik.handleBlur("address")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <div className="error ms-2 my-1">
                     {formik.touched.address && formik.errors.address}
@@ -302,12 +237,12 @@ const Checkout = () => {
                 <div className="w-100">
                   <input
                     type="text"
-                    placeholder="Apartment, Suite ,etc"
+                    placeholder="Apartment, Suite, etc"
                     className="form-control"
                     name="other"
                     value={formik.values.other}
-                    onChange={formik.handleChange("other")}
-                    onBlur={formik.handleBlur("other")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                 </div>
                 <div className="flex-grow-1">
@@ -317,8 +252,8 @@ const Checkout = () => {
                     className="form-control"
                     name="city"
                     value={formik.values.city}
-                    onChange={formik.handleChange("city")}
-                    onBlur={formik.handleBlur("city")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <div className="error ms-2 my-1">
                     {formik.touched.city && formik.errors.city}
@@ -327,11 +262,10 @@ const Checkout = () => {
                 <div className="flex-grow-1">
                   <select
                     className="form-control form-select"
-                    id=""
                     name="state"
                     value={formik.values.state}
-                    onChange={formik.handleChange("state")}
-                    onBlur={formik.handleChange("state")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   >
                     <option value="" selected disabled>
                       Select State
@@ -349,11 +283,42 @@ const Checkout = () => {
                     className="form-control"
                     name="pincode"
                     value={formik.values.pincode}
-                    onChange={formik.handleChange("pincode")}
-                    onBlur={formik.handleBlur("pincode")}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <div className="error ms-2 my-1">
                     {formik.touched.pincode && formik.errors.pincode}
+                  </div>
+                </div>
+                <div className="w-100">
+                  <h4 className="mb-3">Payment Method</h4>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="paymentMethod"
+                      id="vnpay"
+                      value="VNPay"
+                      checked={paymentMethod === "VNPay"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <label className="form-check-label" htmlFor="vnpay">
+                      VNPay
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="paymentMethod"
+                      id="cod"
+                      value="COD"
+                      checked={paymentMethod === "COD"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <label className="form-check-label" htmlFor="cod">
+                      Cash on Delivery
+                    </label>
                   </div>
                 </div>
                 <div className="w-100">
@@ -406,7 +371,10 @@ const Checkout = () => {
                       </div>
                       <div className="flex-grow-1">
                         <h5 className="total">
-                          Rs. {item?.price * item?.quantity}
+                          {(item?.price * item?.quantity).toLocaleString(
+                            "vi-VN"
+                          )}
+                          ₫
                         </h5>
                       </div>
                     </div>
@@ -417,18 +385,21 @@ const Checkout = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <p className="total">Subtotal</p>
                 <p className="total-price">
-                  Rs. {totalAmount ? totalAmount : "0"}
+                  {totalAmount ? totalAmount.toLocaleString("vi-VN") : "0"}₫
                 </p>
               </div>
               <div className="d-flex justify-content-between align-items-center">
                 <p className="mb-0 total">Shipping</p>
-                <p className="mb-0 total-price">Rs. 100</p>
+                <p className="mb-0 total-price">100000₫</p>
               </div>
             </div>
             <div className="d-flex justify-content-between align-items-center border-bootom py-4">
               <h4 className="total">Total</h4>
               <h5 className="total-price">
-                Rs. {totalAmount ? totalAmount + 100 : "0"}
+                {totalAmount
+                  ? (totalAmount + 100000).toLocaleString("vi-VN")
+                  : "0"}
+                ₫
               </h5>
             </div>
           </div>

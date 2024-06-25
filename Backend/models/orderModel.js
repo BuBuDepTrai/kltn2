@@ -37,14 +37,23 @@ var orderSchema = new mongoose.Schema(
         required: true,
       },
     },
+    paymentMethod: {
+      type: String,
+      required: true,
+      enum: ["VNPay", "COD"], // Add other payment methods if needed
+    },
     paymentInfo: {
-      razorpayOrderId: {
+      vnpayOrderId: {
         type: String,
-        required: true,
+        required: function() {
+          return this.paymentMethod === "VNPay";
+        },
       },
-      razorpayPaymentId: {
+      vnpayPaymentId: {
         type: String,
-        required: true,
+        required: function() {
+          return this.paymentMethod === "VNPay";
+        },
       },
     },
     orderItems: [
@@ -71,11 +80,11 @@ var orderSchema = new mongoose.Schema(
     ],
     paidAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
     },
     month: {
       type: Number,
-      default: new Date().getMonth(),
+      default: new Date().getMonth() + 1, // Adjusted to get the correct month (January is 0)
     },
     totalPrice: {
       type: Number,
@@ -95,5 +104,5 @@ var orderSchema = new mongoose.Schema(
   }
 );
 
-//Export the model
+// Export the model
 module.exports = mongoose.model("Order", orderSchema);

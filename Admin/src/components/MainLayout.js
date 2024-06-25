@@ -20,15 +20,23 @@ import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
+
 const { Header, Sider, Content } = Layout;
+
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
   return (
-    <Layout /* onContextMenu={(e) => e.preventDefault()} */>
+    <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
           <h2 className="text-white fs-5 text-center py-3 mb-0">
@@ -42,13 +50,13 @@ const MainLayout = () => {
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
             if (key === "signout") {
-              localStorage.clear();
-              window.location.reload();
+              handleLogout(); // Call handleLogout when Sign Out is clicked
             } else {
               navigate(key);
             }
           }}
           items={[
+            // Your menu items configuration
             {
               key: "",
               icon: <AiOutlineDashboard className="fs-4" />,
@@ -185,6 +193,7 @@ const MainLayout = () => {
           )}
           <div className="d-flex gap-4 align-items-center">
             <div className="d-flex gap-3 align-items-center dropdown">
+              {/* Dropdown content */}
               <div>
                 <img
                   width={32}
@@ -203,20 +212,12 @@ const MainLayout = () => {
                 <p className="mb-0">devjariwala8444@gmail.com</p>
               </div>
               <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
                 <li>
                   <Link
                     className="dropdown-item py-1 mb-1"
                     style={{ height: "auto", lineHeight: "20px" }}
-                    to="/"
-                  >
-                    View Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item py-1 mb-1"
-                    style={{ height: "auto", lineHeight: "20px" }}
-                    to="/"
+                    onClick={handleLogout}
                   >
                     Signout
                   </Link>
@@ -250,4 +251,5 @@ const MainLayout = () => {
     </Layout>
   );
 };
+
 export default MainLayout;

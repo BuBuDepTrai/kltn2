@@ -72,7 +72,7 @@ const Header = () => {
               <p className="text-end text-white mb-0">
                 Hotline:
                 <a className="text-white" href="tel:+91 8264954234">
-                  +91 8264954234
+                  +84 8264954234
                 </a>
               </p>
             </div>
@@ -85,7 +85,7 @@ const Header = () => {
             <div className="col-2">
               <h2>
                 <Link className="text-white" to="/ ">
-                  Cart Corner
+                  A2K
                 </Link>
               </h2>
             </div>
@@ -160,8 +160,9 @@ const Header = () => {
                         {cartState?.length ? cartState?.length : 0}
                       </span>
                       <p className="mb-0">
-                        Rs. {!cartState?.length ? 0 : total ? total : 0}
-                      </p>
+  {!cartState?.length ? 0 : total ? (total).toLocaleString('vi-VN') : 0}₫
+</p>
+
                     </div>
                   </Link>
                 </div>

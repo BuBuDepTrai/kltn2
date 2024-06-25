@@ -32,6 +32,7 @@ const SingleProduct = () => {
   const productState = useSelector((state) => state?.product?.singleproduct);
   const productsState = useSelector((state) => state?.product?.product);
   const cartState = useSelector((state) => state?.auth?.cartProducts);
+  const authState = useSelector((state) => state?.auth);
   const rat = productState?.totalrating;
   const wishlistState = useSelector((state) => state?.auth?.wishlist?.wishlist);
   console.log(wishlistState);
@@ -143,7 +144,7 @@ const SingleProduct = () => {
             <div className="other-product-images d-flex flex-wrap gap-15">
               {productState?.images.map((item, index) => {
                 return (
-                  <div>
+                  <div key={index}>
                     <img src={item?.url} className="img-fluid" alt="" />
                   </div>
                 );
@@ -156,7 +157,13 @@ const SingleProduct = () => {
                 <h3 className="title">{productState?.title}</h3>
               </div>
               <div className="border-bottom py-3">
-                <p className="price"> Rs. {productState?.price}/-</p>
+                <p className="price">
+                  {productState?.price
+                    ? (productState.price).toLocaleString("vi-VN")
+                    : 0}
+                  ₫
+                </p>
+
                 <div className="d-flex align-items-center gap-10">
                   <ReactStars
                     count={5}
@@ -194,23 +201,6 @@ const SingleProduct = () => {
                   <h3 className="product-heading">Availablity :</h3>
                   <p className="product-data">In Stock</p>
                 </div>
-                {/* <div className="d-flex gap-10 flex-column mt-2 mb-3">
-                  <h3 className="product-heading">Size :</h3>
-                  <div className="d-flex flex-wrap gap-15">
-                    <span className="badge border border-1 bg-white text-dark border-secondary">
-                      S
-                    </span>
-                    <span className="badge border border-1 bg-white text-dark border-secondary">
-                      M
-                    </span>
-                    <span className="badge border border-1 bg-white text-dark border-secondary">
-                      XL
-                    </span>
-                    <span className="badge border border-1 bg-white text-dark border-secondary">
-                      XXL
-                    </span>
-                  </div>
-                </div> */}
                 {alreadyAdded === false && (
                   <div className="d-flex gap-10 flex-column mt-2 mb-3">
                     <h3 className="product-heading">Color :</h3>
@@ -247,8 +237,6 @@ const SingleProduct = () => {
                   >
                     <button
                       className="button border-0"
-                      // data-bs-toggle="modal"
-                      // data-bs-target="#staticBackdrop"
                       type="button"
                       onClick={() => {
                         alreadyAdded ? navigate("/cart") : uploadCart();
@@ -256,15 +244,9 @@ const SingleProduct = () => {
                     >
                       {alreadyAdded ? "Go to Cart" : "Add to Cart "}
                     </button>
-                    {/* <button className="button signup">Buy It Now</button> */}
                   </div>
                 </div>
                 <div className="d-flex align-items-center gap-15">
-                  {/* <div>
-                    <a href="">
-                      <TbGitCompare className="fs-5 me-2" /> Add to Compare
-                    </a>
-                  </div> */}
                   <div>
                     {isFilled ? (
                       <AiFillHeart
@@ -386,9 +368,9 @@ const SingleProduct = () => {
                 {productState &&
                   productState.ratings?.map((item, index) => {
                     return (
-                      <div className="review">
+                      <div className="review" key={index}>
                         <div className="d-flex gap-10 align-items-center">
-                          <h6 className="mb-0">user</h6>
+                          <h6 className="mb-0">{authState?.user?.firstname}</h6>
                           <ReactStars
                             count={5}
                             size={24}
@@ -416,61 +398,6 @@ const SingleProduct = () => {
           <ProductCard data={popularProduct} />
         </div>
       </Container>
-
-      {/* <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered ">
-          <div className="modal-content">
-            <div className="modal-header py-0 border-0">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body py-0">
-              <div className="d-flex align-items-center">
-                <div className="flex-grow-1 w-50">
-                  <img src={watch} className="img-fluid" alt="product imgae" />
-                </div>
-                <div className="d-flex flex-column flex-grow-1 w-50">
-                  <h6 className="mb-3">Apple Watch</h6>
-                  <p className="mb-1">Quantity: asgfd</p>
-                  <p className="mb-1">Color: asgfd</p>
-                  <p className="mb-1">Size: asgfd</p>
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer border-0 py-0 justify-content-center gap-30">
-              <button type="button" className="button" data-bs-dismiss="modal">
-                View My Cart
-              </button>
-              <button type="button" className="button signup">
-                Checkout
-              </button>
-            </div>
-            <div className="d-flex justify-content-center py-3">
-              <Link
-                className="text-dark"
-                to="/product"
-                onClick={() => {
-                  closeModal();
-                }}
-              >
-                Continue To Shopping
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

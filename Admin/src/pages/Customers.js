@@ -1,7 +1,20 @@
 import React, { useEffect } from "react";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../features/cutomers/customerSlice";
+import styled from "styled-components";
+
+const RoleTag = styled(Tag)`
+  &.User {
+    background-color: #f3f0ff;
+    color: purple;
+  }
+  &.Admin {
+    background-color: #e6fffb;
+    color: green;
+  }
+`;
+
 const columns = [
   {
     title: "SNo",
@@ -20,24 +33,40 @@ const columns = [
     title: "Mobile",
     dataIndex: "mobile",
   },
+  {
+    title: "Role",
+    dataIndex: "role",
+    render: (role) => {
+      let color = "";
+      if (role === "Admin") {
+        color = "green";
+      } else {
+        color = "purple";
+      }
+      return (
+        <RoleTag className={role} color={color}>
+          {role}
+        </RoleTag>
+      );
+    },
+  },
 ];
 
 const Customers = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUsers());
-  }, []);
+  }, [dispatch]);
   const customerstate = useSelector((state) => state.customer.customers);
   const data1 = [];
   for (let i = 0; i < customerstate.length; i++) {
-    if (customerstate[i].role !== "admin") {
-      data1.push({
-        key: i + 1,
-        name: customerstate[i].firstname + " " + customerstate[i].lastname,
-        email: customerstate[i].email,
-        mobile: customerstate[i].mobile,
-      });
-    }
+    data1.push({
+      key: i + 1,
+      name: customerstate[i].firstname + " " + customerstate[i].lastname,
+      email: customerstate[i].email,
+      mobile: customerstate[i].mobile,
+      role: customerstate[i].role,
+    });
   }
 
   return (

@@ -261,7 +261,10 @@ const Home = () => {
                           activeColor="#ffd700"
                         />
 
-                        <p className="price">Rs. {item?.price}</p>
+<p className="price">
+  {item?.price ? (item.price).toLocaleString('vi-VN') : 0}₫
+</p>
+
                       </div>
                       <div className="action-bar position-absolute">
                         <div className="d-flex flex-column gap-15">
@@ -367,7 +370,7 @@ const Home = () => {
                     title={item?.title}
                     brand={item?.brand}
                     totalrating={item?.totalrating.toString()}
-                    price={item?.price}
+                    price={item?.price ? (item.price).toLocaleString('vi-VN') : 0}
                     img={item?.images[0].url}
                     sold={item?.sold}
                     quantity={item?.quantity}
@@ -432,7 +435,9 @@ const Home = () => {
                           activeColor="#ffd700"
                         />
 
-                        <p className="price">Rs. {item?.price}</p>
+<p className="price">
+  {item?.price ? (item.price).toLocaleString('vi-VN') : 0}₫
+</p>
                       </div>
                       <div className="action-bar position-absolute">
                         <div className="d-flex flex-column gap-15">
