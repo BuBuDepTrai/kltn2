@@ -6,23 +6,21 @@ import ProductCard from "../components/ProductCard";
 import Color from "../components/Color";
 import Container from "../components/Container";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProducts } from "../features/products/productSlilce";
+import { getAllProducts, clearCompareList } from "../features/products/productSlilce";
 import { Link } from "react-router-dom";
 
 const OurStore = () => {
   const [grid, setGrid] = useState(4);
   const productState = useSelector((state) => state?.product?.product);
+  const compareList = useSelector((state) => state?.product?.compareList);
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [tags, setTags] = useState([]);
-
-  //filter state
   const [tag, setTag] = useState(null);
   const [category, setCategory] = useState(null);
   const [brand, setBrand] = useState(null);
-  const [minPrice, setminPrice] = useState(null);
-  const [maxPrice, setmaxPrice] = useState(null);
+  const [minPrice, setMinPrice] = useState(null);
+  const [maxPrice, setMaxPrice] = useState(null);
   const [sort, setSort] = useState(null);
 
   useEffect(() => {
@@ -92,7 +90,7 @@ const OurStore = () => {
                       className="form-control"
                       id="floatingInput"
                       placeholder="From"
-                      onChange={(e) => setminPrice(e.target.value)}
+                      onChange={(e) => setMinPrice(e.target.value)}
                     />
                     <label htmlFor="floatingInput">From</label>
                   </div>
@@ -102,7 +100,7 @@ const OurStore = () => {
                       className="form-control"
                       id="floatingInput1"
                       placeholder="To"
-                      onChange={(e) => setmaxPrice(e.target.value)}
+                      onChange={(e) => setMaxPrice(e.target.value)}
                     />
                     <label htmlFor="floatingInput1">To</label>
                   </div>
@@ -224,6 +222,31 @@ const OurStore = () => {
                 />
               </div>
             </div>
+            {compareList.length > 0 && (
+              <div className="compare-section mb-4">
+                <h3>So sánh sản phẩm</h3>
+                <div className="d-flex gap-3 overflow-auto">
+                  {compareList.map((item) => (
+                    <div key={item._id} className="card" style={{ width: "18rem" }}>
+                      <img src={item.images[0]?.url} className="card-img-top" alt={item.title} />
+                      <div className="card-body">
+                        <h5 className="card-title">{item.title}</h5>
+                        <p className="card-text">{item.price.toLocaleString('vi-VN')}đ</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="d-flex justify-content-end mt-3">
+                  <Link to="/compare" className="btn btn-primary">So sánh ngay</Link>
+                  <button
+                    onClick={() => dispatch(clearCompareList())}
+                    className="btn btn-secondary ms-2"
+                  >
+                    Xóa tất cả sản phẩm
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </Container>

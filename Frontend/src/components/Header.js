@@ -66,13 +66,13 @@ const Header = () => {
         <div className="container-xxl">
           <div className="row">
             <div className="col-6">
-              <p className="text-white mb-0">Free Shipping Over Rs.100</p>
+              <p className="text-white mb-0">Free Shipping Over 1.000.000đ</p>
             </div>
             <div className="col-6">
               <p className="text-end text-white mb-0">
                 Hotline:
                 <a className="text-white" href="tel:+91 8264954234">
-                  +84 8264954234
+                  +84 0703587329
                 </a>
               </p>
             </div>

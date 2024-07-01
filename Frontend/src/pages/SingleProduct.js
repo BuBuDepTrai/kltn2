@@ -22,7 +22,6 @@ import { addProdToCart, getUserCart } from "../features/user/userSlice";
 
 const SingleProduct = () => {
   const [color, setColor] = useState(null);
-
   const [quantity, setQuantity] = useState(1);
   const [alreadyAdded, setAlreadyAdded] = useState(false);
   const location = useLocation();
@@ -59,20 +58,20 @@ const SingleProduct = () => {
         addProdToCart({
           productId: productState?._id,
           quantity,
-          color,
+          color: color._id,
           price: productState?.price,
         }),
         navigate("/cart")
       );
     }
   };
+
   const props = {
     width: 594,
     height: 600,
     zoomWidth: 600,
-
-    img: productState?.images[0].url
-      ? productState?.images[0].url
+    img: productState?.images[0]?.url
+      ? productState?.images[0]?.url
       : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg",
   };
 
@@ -129,6 +128,23 @@ const SingleProduct = () => {
     return false;
   };
 
+  // New state to handle image navigation
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Function to handle next image
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === productState?.images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  // Function to handle previous image
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? productState?.images.length - 1 : prevIndex - 1
+    );
+  };
+
   return (
     <>
       <Meta title={"Product Name"} />
@@ -137,8 +153,10 @@ const SingleProduct = () => {
         <div className="row">
           <div className="col-6">
             <div className="main-product-image">
-              <div>
-                <ReactImageZoom {...props} />
+              <div className="image-container">
+                <ReactImageZoom {...props} img={productState?.images[currentImageIndex]?.url} />
+                <button className="prev-button" onClick={prevImage}>&#10094;</button>
+                <button className="next-button" onClick={nextImage}>&#10095;</button>
               </div>
             </div>
             <div className="other-product-images d-flex flex-wrap gap-15">
@@ -168,7 +186,7 @@ const SingleProduct = () => {
                   <ReactStars
                     count={5}
                     size={24}
-                    value={productState?.totalrating.toString()}
+                    value={productState?.totalrating?.toString()}
                     edit={false}
                     activeColor="#ffd700"
                   />
@@ -197,7 +215,7 @@ const SingleProduct = () => {
                   <h3 className="product-heading">Tags :</h3>
                   <p className="product-data">{productState?.tags}</p>
                 </div>
-                <div className="d-flex gap-10 align-items-center my-2">
+                <div className="d-flex gap-10 align-items-center my-2"> 
                   <h3 className="product-heading">Availablity :</h3>
                   <p className="product-data">In Stock</p>
                 </div>
@@ -398,6 +416,32 @@ const SingleProduct = () => {
           <ProductCard data={popularProduct} />
         </div>
       </Container>
+      <style jsx>{`
+        .image-container {
+          position: relative;
+        }
+
+        .prev-button,
+        .next-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background-color: rgba(0, 0, 0, 0.5);
+          color: white;
+          border: none;
+          padding: 10px;
+          cursor: pointer;
+          z-index: 1;
+        }
+
+        .prev-button {
+          left: 0;
+        }
+
+        .next-button {
+          right: 0;
+        }
+      `}</style>
     </>
   );
 };

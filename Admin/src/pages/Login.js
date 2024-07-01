@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../features/auth/authSlice";
+import logo from "../assets/Black Circle Icon Business Logo (3).png"; // Adjust the path as needed
 
 let schema = yup.object().shape({
   email: yup
@@ -40,17 +41,25 @@ const Login = () => {
   }, [user, isError, isSuccess, isLoading]);
 
   return (
-    <div style={styles.loginContainer}>
-      <div style={styles.loginLeft}>
-        <div style={styles.loginIllustration}></div>
+    <div style={styles.container}>
+      <div style={styles.leftPanel}>
+        <div style={styles.leftContent}>
+          <h1>A2K</h1>
+          <p>
+            ¡Descubre, comparte y conecta con la vibrante comunidad literaria
+            que hemos creado para ti!
+          </p>
+        </div>
       </div>
-      <div style={styles.loginRight}>
+      <div style={styles.rightPanel}>
         <div style={styles.loginFormContainer}>
-          <h3 style={styles.loginTitle}>Wecome</h3>
+          <img src={logo} alt="A2K Logo" style={styles.logo} />
+          <h3 style={styles.loginTitle}>Welcome to A2K</h3>
+          <p>Đăng nhập và bắt đầu khám phá những điều thú vị !!!</p>
           <form onSubmit={formik.handleSubmit}>
             <CustomInput
               type="text"
-              label="Nhập email"
+              label="email"
               id="email"
               name="email"
               onChng={formik.handleChange("email")}
@@ -62,7 +71,7 @@ const Login = () => {
             </div>
             <CustomInput
               type="password"
-              label="密码"
+              label="password"
               id="pass"
               name="password"
               onChng={formik.handleChange("password")}
@@ -74,10 +83,10 @@ const Login = () => {
             </div>
             <div style={styles.rememberMe}>
               <input type="checkbox" id="rememberMe" name="rememberMe" />
-              <label htmlFor="rememberMe">记住密码</label>
+              <label htmlFor="rememberMe">Remember Me</label>
             </div>
             <button style={styles.loginButton} type="submit">
-              登录
+              Login
             </button>
           </form>
         </div>
@@ -87,57 +96,59 @@ const Login = () => {
 };
 
 const styles = {
-  loginContainer: {
+  container: {
     display: "flex",
     minHeight: "100vh",
+    fontFamily: "'Arial', sans-serif",
   },
-  loginLeft: {
+  leftPanel: {
     flex: 1,
-    background: "linear-gradient(to right, #6441a5, #2a0845)",
+    backgroundColor: "#4CA2CD",
+    color: "#fff",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  loginIllustration: {
-    backgroundImage: 'url("https://i.imgur.com/cbnTHN9.jpeg")', // Hình mẫu, thay thế bằng hình của bạn
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    width: "80%",
-    height: "80%",
+  leftContent: {
+    textAlign: "center",
   },
-  loginRight: {
+  rightPanel: {
     flex: 1,
+    backgroundColor: "#F5F5F5",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "#fff",
   },
   loginFormContainer: {
     width: "80%",
     maxWidth: "400px",
-    background: "#fff",
-    padding: "40px",
+    padding: "20px",
+    backgroundColor: "#fff",
     borderRadius: "8px",
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+    textAlign: "center", // Center content
+  },
+  logo: {
+    width: "150px", // Adjust the size as needed
+    marginBottom: "20px", // Space between logo and title
   },
   loginTitle: {
     fontSize: "24px",
-    marginBottom: "20px",
-    textAlign: "center",
+    marginBottom: "10px",
   },
   error: {
     marginTop: "10px",
     color: "red",
-    textAlign: "center",
   },
   rememberMe: {
     display: "flex",
     alignItems: "center",
     marginTop: "10px",
+    justifyContent: "center", // Center checkbox and label
   },
   loginButton: {
     width: "100%",
-    background: "#6441a5",
+    backgroundColor: "#4CA2CD",
     color: "#fff",
     border: "none",
     padding: "10px",
@@ -145,9 +156,6 @@ const styles = {
     fontSize: "16px",
     cursor: "pointer",
     transition: "background 0.3s",
-  },
-  loginButtonHover: {
-    background: "#2a0845",
   },
   registerLink: {
     textAlign: "center",

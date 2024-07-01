@@ -54,10 +54,14 @@ const Orders = () => {
         return { backgroundColor: "#D3D3D3", color: "black", padding: "5px 10px", borderRadius: "5px" };
       case "Processed":
         return { backgroundColor: "#A9A9A9", color: "black", padding: "5px 10px", borderRadius: "5px" };
+      case "Shipped":
+        return { backgroundColor: "#FFD700", color: "black", padding: "5px 10px", borderRadius: "5px" };
       case "Out for Delivery":
         return { backgroundColor: "#FFD700", color: "black", padding: "5px 10px", borderRadius: "5px" };
       case "Delivered":
         return { backgroundColor: "#90EE90", color: "black", padding: "5px 10px", borderRadius: "5px" };
+      case "Cancelled":
+        return { backgroundColor: "#FF0000", color: "black", padding: "5px 10px", borderRadius: "5px" }; // Changed to red
       default:
         return { backgroundColor: "white", color: "black", padding: "5px 10px", borderRadius: "5px" };
     }
@@ -169,9 +173,11 @@ const Orders = () => {
           >
             <option value="">All</option>
             <option value="Ordered">Ordered</option>
+            <option value="Shipped">Shipped</option> 
             <option value="Processed">Processed</option>
             <option value="Out for Delivery">Out for Delivery</option>  
             <option value="Delivered">Delivered</option> 
+            <option value="Cancelled">Cancelled</option> 
           </select>
         </div>
         <div style={styles.orderList}>
@@ -242,8 +248,8 @@ const Orders = () => {
                           <div style={styles.detailSection}>
                             <h5>Thông tin người nhận</h5>
                             <p>Người nhận: {item.shippingInfo.firstname} {item.shippingInfo.lastname}</p>
-                            <p>Số điện thoại: {item.shippingInfo.phone}</p>
-                            <p>Địa chỉ giao hàng: {item.shippingInfo.address}, {item.shippingInfo.city}, {item.shippingInfo.state}, {item.shippingInfo.country}, {item.shippingInfo.pincode}</p>
+                            <p>Số điện thoại: {item.shippingInfo.pincode}</p>
+                            <p>Địa chỉ giao hàng: {item.shippingInfo.address}, {item.shippingInfo.city}, {item.shippingInfo.state}, {item.shippingInfo.country}</p>
                           </div>
                           <div style={styles.orderProducts}>
                             <h5>Chi Tiết Sản Phẩm</h5>

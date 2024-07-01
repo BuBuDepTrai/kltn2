@@ -107,19 +107,28 @@ const loginAdmin = asyncHandler(async (req, res) => {
 // handle refresh token
 
 const handleRefreshToken = asyncHandler(async (req, res) => {
-  const cookie = req.cookies;
-  if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
-  const refreshToken = cookie.refreshToken;
+  const cookies = req.cookies;
+  if (!cookies?.refreshToken) {
+    return res.status(401).json({ message: "No Refresh Token in Cookies" });
+  }
+  const refreshToken = cookies.refreshToken;
   const user = await User.findOne({ refreshToken });
-  if (!user) throw new Error(" No Refresh token present in db or not matched");
+
+  if (!user) {
+    return res.status(403).json({ message: "Refresh Token not found, please login again" });
+  }
+
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
     if (err || user.id !== decoded.id) {
-      throw new Error("There is something wrong with refresh token");
+      return res.status(403).json({ message: "Refresh Token is invalid, please login again" });
     }
-    const accessToken = generateToken(user?._id);
+    const accessToken = generateToken(user._id);
     res.json({ accessToken });
   });
 });
+
+
+
 
 // logout functionality
 
@@ -148,34 +157,27 @@ const logout = asyncHandler(async (req, res) => {
 // Update a user
 
 const updatedUser = asyncHandler(async (req, res) => {
-  const { id } = req.body; // Assume the user ID is passed in the body
-  validateMongoDbId(id);
+  const { _id } = req.user;
+  validateMongoDbId(_id);
 
   try {
-    const user = await User.findById(id);
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
-
     const updatedUser = await User.findByIdAndUpdate(
-      id,
+      _id,
       {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        mobile: req.body.mobile,
+        firstname: req?.body?.firstname,
+        lastname: req?.body?.lastname,
+        email: req?.body?.email,
+        mobile: req?.body?.mobile,
       },
-      { new: true }
+      {
+        new: true,
+      }
     );
-
     res.json(updatedUser);
   } catch (error) {
-    res.status(500);
-    throw new Error(error.message);
+    throw new Error(error);
   }
 });
-
 
 // save user Address
 
@@ -233,20 +235,14 @@ const deleteaUser = asyncHandler(async (req, res) => {
   validateMongoDbId(id);
 
   try {
-    const user = await User.findById(id);
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
-    await User.findByIdAndDelete(id);
-    res.json({ message: "User deleted successfully" });
+    const deleteaUser = await User.findByIdAndDelete(id);
+    res.json({
+      deleteaUser,
+    });
   } catch (error) {
-    res.status(500);
-    throw new Error(error.message);
+    throw new Error(error);
   }
 });
-
-
 
 const blockUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -255,16 +251,16 @@ const blockUser = asyncHandler(async (req, res) => {
   try {
     const blockusr = await User.findByIdAndUpdate(
       id,
-      {
-        isBlocked: true,
-      },
-      {
-        new: true,
-      }
+      { isBlocked: true },
+      { new: true }
     );
+    if (!blockusr) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.json(blockusr);
   } catch (error) {
-    throw new Error(error);
+    console.error("Error blocking user:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
 
@@ -275,20 +271,20 @@ const unblockUser = asyncHandler(async (req, res) => {
   try {
     const unblock = await User.findByIdAndUpdate(
       id,
-      {
-        isBlocked: false,
-      },
-      {
-        new: true,
-      }
+      { isBlocked: false },
+      { new: true }
     );
-    res.json({
-      message: "User UnBlocked",
-    });
+    if (!unblock) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ unblock, message: "User UnBlocked" });
   } catch (error) {
-    throw new Error(error);
+    console.error("Error unblocking user:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 });
+
+
 
 const updatePassword = asyncHandler(async (req, res) => {
   const { _id } = req.user;

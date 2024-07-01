@@ -6,8 +6,8 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import OurStore from "./pages/OurStore";
+import Compare from "./pages/Compare";
 import Blog from "./pages/Blog";
-import CompareProduct from "./pages/CompareProduct";
 import Wishlist from "./pages/Wishlist";
 import Login from "./pages/Login";
 import Forgotpassword from "./pages/Forgotpassword";
@@ -36,6 +36,7 @@ function App() {
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
             <Route path="product" element={<OurStore />} />
+            <Route path="/compare" element={<Compare />} />
             <Route path="product/:id" element={<SingleProduct />} />
             <Route path="blogs" element={<Blog />} />
             <Route path="blog/:id" element={<SingleBlog />} />
@@ -71,7 +72,6 @@ function App() {
                 </PrivateRoutes>
               }
             />
-            <Route path="compare-product" element={<CompareProduct />} />
             <Route
               path="wishlist"
               element={

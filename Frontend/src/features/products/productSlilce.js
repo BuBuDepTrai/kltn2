@@ -35,14 +35,6 @@ export const addToWishlist = createAsyncThunk(
   }
 );
 
-const productState = {
-  product: "",
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: "",
-};
-
 export const addRating = createAsyncThunk(
   "product/rating",
   async (data, thunkAPI) => {
@@ -54,10 +46,38 @@ export const addRating = createAsyncThunk(
   }
 );
 
+const productState = {
+  product: [],
+  compareList: [],
+  singleproduct: null,
+  addToWishlist: null,
+  rating: null,
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: "",
+};
+
 export const productSlice = createSlice({
   name: "product",
   initialState: productState,
-  reducers: {},
+  reducers: {
+    toggleCompare: (state, action) => {
+      const productId = action.payload;
+      const existingIndex = state.compareList.findIndex(
+        (item) => item._id === productId
+      );
+      if (existingIndex >= 0) {
+        state.compareList.splice(existingIndex, 1);
+      } else {
+        const product = state.product.find((item) => item._id === productId);
+        if (product) state.compareList.push(product);
+      }
+    },
+    clearCompareList: (state) => {
+      state.compareList = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllProducts.pending, (state) => {
@@ -128,5 +148,7 @@ export const productSlice = createSlice({
       });
   },
 });
+
+export const { toggleCompare, clearCompareList } = productSlice.actions;
 
 export default productSlice.reducer;

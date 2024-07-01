@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../features/user/userSlice";
+import logo from "../assets/Black Circle Icon Business Logo (3).png"; // Adjust the path according to your project structure
 
 let loginSchema = yup.object({
   email: yup
@@ -51,6 +52,9 @@ const Login = () => {
         <div className="row">
           <div className="col-12">
             <div className="auth-card">
+              <div className="text-center mb-3">
+                <img src={logo} alt="Logo" style={{ width: "100px", height: "auto" }} />
+              </div>
               <h3 className="text-center mb-3">Login</h3>
               <form
                 action=""

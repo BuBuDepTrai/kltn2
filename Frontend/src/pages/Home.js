@@ -41,7 +41,6 @@ const Home = () => {
   };
 
   const addToWish = (id) => {
-    //alert(id);
     dispatch(addToWishlist(id));
   };
   return (
@@ -58,8 +57,8 @@ const Home = () => {
               <div className="main-banner-content position-absolute">
                 <h4>SUPERCHARGED FOR PROS.</h4>
                 <h5>iPad S13+ Pro.</h5>
-                <p>From Rs. 81,900.00 </p>
-                <Link className="button">BUY NOW</Link>
+                <p>From 9.000.000đ </p>
+                <Link to="/product?category=dt" className="button">BUY NOW</Link>
               </div>
             </div>
           </div>
@@ -75,7 +74,7 @@ const Home = () => {
                   <h4>Best Sake</h4>
                   <h5>MacBook Pro.</h5>
                   <p>
-                    From Rs. 1,29,900.00 <br />
+                    From  12.990.000đ <br />
                   </p>
                 </div>
               </div>
@@ -89,7 +88,7 @@ const Home = () => {
                   <h4>NEW ARRIVAL</h4>
                   <h5>But IPad Air</h5>
                   <p>
-                    From Rs. 21,625.00 <br />
+                    From  21.625.000đ <br />
                   </p>
                 </div>
               </div>
@@ -103,7 +102,7 @@ const Home = () => {
                   <h4>NEW ARRIVAL</h4>
                   <h5>But IPad Air</h5>
                   <p>
-                    From Rs. 41,900.00 <br />
+                    From  14.900.000đ <br />
                   </p>
                 </div>
               </div>
@@ -117,7 +116,7 @@ const Home = () => {
                   <h4>NEW ARRIVAL</h4>
                   <h5>But Headphone</h5>
                   <p>
-                    From Rs. 41,000.00 <br />
+                    From Rs. 1.000.000đ <br />
                   </p>
                 </div>
               </div>
@@ -144,70 +143,6 @@ const Home = () => {
           </div>
         </div>
       </Container>
-      {/* <Container class1="home-wrapper-2 py-5">
-        <div className="row">
-          <div className="col-12">
-            <div className="categories d-flex justify-content-between flex-wrap align-items-center">
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Music & Gaming</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/camera.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Cameras</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/camera.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Smart Tv</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/tv.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Smart Watches</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/headphone.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Music & Gaming</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/camera.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Cameras</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/camera.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Smart Tv</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/tv.jpg" alt="camera" />
-              </div>
-              <div className="d-flex gap align-items-center">
-                <div>
-                  <h6>Smart Watches</h6>
-                  <p>10 Items</p>
-                </div>
-                <img src="images/headphone.jpg" alt="camera" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </Container> */}
       <Container class1="featured-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-12">
@@ -233,7 +168,6 @@ const Home = () => {
                       <div className="product-image">
                         <img
                           src={item?.images[0]?.url}
-                          //className="img-fluid d"
                           alt="product image"
                           height={"250px"}
                           width={"260px"}
@@ -241,7 +175,6 @@ const Home = () => {
                         />
                         <img
                           src={item?.images[0]?.url}
-                          //className="img-fluid d"
                           alt="product image"
                           height={"250px"}
                           width={"260px"}
@@ -260,28 +193,9 @@ const Home = () => {
                           edit={false}
                           activeColor="#ffd700"
                         />
-
-<p className="price">
-  {item?.price ? (item.price).toLocaleString('vi-VN') : 0}₫
-</p>
-
-                      </div>
-                      <div className="action-bar position-absolute">
-                        <div className="d-flex flex-column gap-15">
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={prodcompare} alt="compare" />
-                          </button>
-                          <button className="border-0 bg-transparent">
-                            <img
-                              onClick={() => navigate("/product/" + item?._id)}
-                              src={view}
-                              alt="view"
-                            />
-                          </button> */}
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={addcart} alt="addcart" />
-                          </button> */}
-                        </div>
+                        <p className="price">
+                          {item?.price ? (item.price).toLocaleString('vi-VN') : 0}₫
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -290,7 +204,6 @@ const Home = () => {
             })}
         </div>
       </Container>
-
       <Container class1="famous-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-3">
@@ -351,7 +264,6 @@ const Home = () => {
           </div>
         </div>
       </Container>
-
       <Container class1="special-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-12">
@@ -362,7 +274,6 @@ const Home = () => {
           {productState &&
             productState?.map((item, index) => {
               if (item.tags === "special") {
-                //console.log(item?._id);
                 return (
                   <SpecialProduct
                     key={index}
@@ -407,7 +318,6 @@ const Home = () => {
                       <div className="product-image">
                         <img
                           src={item?.images[0].url}
-                          // className="img-fluid d"
                           alt="product image"
                           height={"250px"}
                           width={"100%"}
@@ -415,7 +325,6 @@ const Home = () => {
                         />
                         <img
                           src={item?.images[0].url}
-                          // className="img-fluid d"
                           alt="product image"
                           height={"250px"}
                           width={"100%"}
@@ -434,27 +343,9 @@ const Home = () => {
                           edit={false}
                           activeColor="#ffd700"
                         />
-
-<p className="price">
-  {item?.price ? (item.price).toLocaleString('vi-VN') : 0}₫
-</p>
-                      </div>
-                      <div className="action-bar position-absolute">
-                        <div className="d-flex flex-column gap-15">
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={prodcompare} alt="compare" />
-                          </button> */}
-                          {/* <button className="border-0 bg-transparent">
-                            <img
-                              onClick={() => navigate("/product/" + item?._id)}
-                              src={view}
-                              alt="view"
-                            />
-                          </button> */}
-                          {/* <button className="border-0 bg-transparent">
-                            <img src={addcart} alt="addcart" />
-                          </button> */}
-                        </div>
+                        <p className="price">
+                          {item?.price ? (item.price).toLocaleString('vi-VN') : 0}₫
+                        </p>
                       </div>
                     </div>
                   </div>

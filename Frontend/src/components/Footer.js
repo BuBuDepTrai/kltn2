@@ -38,21 +38,19 @@ const Footer = () => {
               <h4 className="text-white mb-4">Contact Us</h4>
               <div>
                 <address className="text-white fs-6">
-                  Hno : Daiict college, Reliance Cross Rd, <br />{" "}
-                  Gandhinagar,Gujarat <br />
-                  PinCode: 382007
+                Address : 1 Võ Văn Ngân, Phường Linh Chiểu, Thành phố Thủ Đức, Thành phố Hồ Chí Minh. <br />
                 </address>
                 <a
-                  href="tel:+91 8264954234"
+                  href="tel:+84 703587329"
                   className="mt-3 d-block mb-1 text-white"
                 >
-                  +91 8264954234
+                  +84 703587329
                 </a>
                 <a
                   href="mailto:devjariwala8444@gmail.com"
                   className="mt-2 d-block mb-0 text-white"
                 >
-                  devjariwala8444@gmail.com
+                  ntkiet11082002@gmail.com
                 </a>
                 <div className="social_icons d-flex align-items-center gap-30 mt-4">
                   <a className="text-white" href="#">
@@ -113,7 +111,7 @@ const Footer = () => {
           <div className="row">
             <div className="col-12">
               <p className="text-center mb-0 text-white">
-                &copy; {new Date().getFullYear()}; Powered by Cart Corner
+                &copy; {new Date().getFullYear()}; Powered by A2K
               </p>
             </div>
           </div>
