@@ -3,10 +3,12 @@ import customerService from "./customerService";
 
 // Async Thunks
 export const getUsers = createAsyncThunk(
-  "customer/get-customers",
+  "customer/all-users",
   async (_, thunkAPI) => {
     try {
-      return await customerService.getUsers();
+      const response = await customerService.getUsers();
+      console.log("Fetched users:", response); // Kiểm tra dữ liệu lấy về từ API
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -40,11 +42,11 @@ export const unblockUser = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  "customer/update-user",
+  "customer/edit-user",
   async (user, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.token; // Assuming you store the token in the auth state
-      if (!token) throw new Error("No token provided"); // Debugging step
+      if (!token) throw new Error("No token provided");
       console.log("Token:", token); // Debugging step
       const response = await customerService.updateUser(user, token);
       return response;

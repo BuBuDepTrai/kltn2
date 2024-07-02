@@ -20,6 +20,8 @@ const Header = () => {
   const [paginate, setPaginate] = useState(true);
   const productState = useSelector((state) => state?.product?.product);
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState(null);
 
   const getTokenFromLocalStorage = localStorage.getItem("customer")
     ? JSON.parse(localStorage.getItem("customer"))
@@ -49,17 +51,23 @@ const Header = () => {
 
   useEffect(() => {
     let data = [];
+    let category = [];
     for (let index = 0; index < productState?.length; index++) {
       const element = productState[index];
       data.push({ id: index, prod: element?._id, name: element?.title });
+      category.push(element.category);
     }
     setProductOpt(data);
+    setCategories(category);
   }, [productState]);
 
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
+
+  // Define the categories and setCategory variables
+  
   return (
     <>
       <header className="header-top-strip py-3">
@@ -160,9 +168,8 @@ const Header = () => {
                         {cartState?.length ? cartState?.length : 0}
                       </span>
                       <p className="mb-0">
-  {!cartState?.length ? 0 : total ? (total).toLocaleString('vi-VN') : 0}₫
-</p>
-
+                        {!cartState?.length ? 0 : total ? total.toLocaleString('vi-VN') : 0}₫
+                      </p>
                     </div>
                   </Link>
                 </div>
@@ -194,16 +201,14 @@ const Header = () => {
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton1"
                     >
-                      {productState &&
-                        productState.map((item, index) => {
-                          return (
-                            <li key={index}>
-                              <Link className="dropdown-item text-white" to="">
-                                {item?.category}
-                              </Link>
-                            </li>
-                          );
-                        })}
+                      {categories &&
+                    [...new Set(categories)].map((item, index) => {
+                      return (
+                        <li key={index} onClick={() => setCategory(item)}>
+                          {item}
+                        </li>
+                      );
+                    })}
                     </ul>
                   </div>
                 </div>
@@ -216,7 +221,7 @@ const Header = () => {
                     <NavLink to="/contact">Contact</NavLink>
                     {authState?.user !== null ? (
                       <button
-                        className="border border-0 bg-trasparent text-white text-uppercase"
+                        className="border border-0 bg-transparent text-white text-uppercase"
                         type="button"
                         style={{ backgroundColor: "#232f3e" }}
                         onClick={handleLogout}

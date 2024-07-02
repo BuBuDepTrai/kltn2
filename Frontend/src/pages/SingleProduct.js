@@ -93,10 +93,9 @@ const SingleProduct = () => {
       const element = productsState[index];
       if (element.tags === "popular") {
         data.push(element);
-      } else {
-        setPopularProduct(data);
       }
     }
+    setPopularProduct(data);
   }, [productsState]);
 
   const [star, setStar] = useState(null);
@@ -142,6 +141,18 @@ const SingleProduct = () => {
       prevIndex === 0 ? productState?.images.length - 1 : prevIndex - 1
     );
   };
+
+  // State and logic for related products
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  useEffect(() => {
+    if (productState?.category) {
+      const filteredProducts = productsState.filter(
+        (product) => product.category === productState.category && product._id !== getProductId
+      );
+      setRelatedProducts(filteredProducts);
+    }
+  }, [productState, productsState, getProductId]);
 
   return (
     <>
@@ -392,7 +403,7 @@ const SingleProduct = () => {
                     return (
                       <div className="review" key={index}>
                         <div className="d-flex gap-10 align-items-center">
-                          <h6 className="mb-0">{authState?.user?.firstname}</h6>
+                          <h6 className="mb-0">{item?.postedby}</h6>
                           <ReactStars
                             count={5}
                             size={24}
@@ -418,6 +429,16 @@ const SingleProduct = () => {
         </div>
         <div className="row">
           <ProductCard data={popularProduct} />
+        </div>
+      </Container>
+      <Container class1="related-wrapper py-5 home-wrapper-2">
+        <div className="row">
+          <div className="col-12">
+            <h3 className="section-heading">Related Products</h3>
+          </div>
+        </div>
+        <div className="row">
+          <ProductCard data={relatedProducts} />
         </div>
       </Container>
       <style jsx>{`
