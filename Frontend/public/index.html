@@ -26,6 +26,20 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
     <title>E Commerce App</title>
+    <style>
+      #df-messenger {
+        position: fixed;
+        bottom: 30px;
+        right: 20px; /* Adjust this value to ensure the bots are side by side */
+        z-index: 1000;
+      }
+      #kommunicate-widget-iframe {
+        position: fixed;
+        bottom: 100px;
+        right: 10px; /* Adjust this value to ensure the bots are side by side */
+        z-index: 1000;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -35,5 +49,23 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+      intent="WELCOME"
+      chat-title="Chat_A2K"
+      agent-id="e503da98-a008-4b7f-91da-d95cb276daf8"
+      language-code="en"
+    ></df-messenger>
+    <script type="text/javascript">
+      (function(d, m){
+          var kommunicateSettings = 
+              {"appId":"33dcbcc13d8e4e5c8f5eac2665933e915","popupWidget":true,"automaticChatOpenOnNavigation":true};
+          var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+          s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+          var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+          window.kommunicate = m; m._globals = kommunicateSettings;
+      })(document, window.kommunicate || {});
+    /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+    </script>
   </body>
 </html>

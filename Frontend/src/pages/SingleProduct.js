@@ -8,7 +8,6 @@ import Color from "../components/Color";
 import { TbGitCompare } from "react-icons/tb";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import watch from "../images/watch.jpg";
 import Container from "../components/Container";
 import { addToWishlist } from "../features/products/productSlilce";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +31,6 @@ const SingleProduct = () => {
   const productsState = useSelector((state) => state?.product?.product);
   const cartState = useSelector((state) => state?.auth?.cartProducts);
   const authState = useSelector((state) => state?.auth);
-  const rat = productState?.totalrating;
   const wishlistState = useSelector((state) => state?.auth?.wishlist?.wishlist);
   console.log(wishlistState);
 
@@ -40,7 +38,7 @@ const SingleProduct = () => {
     dispatch(getAProduct(getProductId));
     dispatch(getUserCart());
     dispatch(getAllProducts());
-  }, []);
+  }, [dispatch, getProductId]);
 
   useEffect(() => {
     for (let index = 0; index < cartState?.length; index++) {
@@ -48,7 +46,7 @@ const SingleProduct = () => {
         setAlreadyAdded(true);
       }
     }
-  });
+  }, [cartState, getProductId]);
 
   const uploadCart = () => {
     if (color === null) {
@@ -60,9 +58,9 @@ const SingleProduct = () => {
           quantity,
           color: color._id,
           price: productState?.price,
-        }),
-        navigate("/cart")
+        })
       );
+      navigate("/cart");
     }
   };
 
@@ -75,7 +73,7 @@ const SingleProduct = () => {
       : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg",
   };
 
-  const [orderedProduct, setorderedProduct] = useState(true);
+  const [orderedProduct, setOrderedProduct] = useState(true);
   const copyToClipboard = (text) => {
     console.log("text", text);
     var textField = document.createElement("textarea");
@@ -99,7 +97,7 @@ const SingleProduct = () => {
         setPopularProduct(data);
       }
     }
-  }, [productState]);
+  }, [productsState]);
 
   const [star, setStar] = useState(null);
   const [comment, setComment] = useState(null);
@@ -154,19 +152,26 @@ const SingleProduct = () => {
           <div className="col-6">
             <div className="main-product-image">
               <div className="image-container">
-                <ReactImageZoom {...props} img={productState?.images[currentImageIndex]?.url} />
-                <button className="prev-button" onClick={prevImage}>&#10094;</button>
-                <button className="next-button" onClick={nextImage}>&#10095;</button>
+                {productState?.images[currentImageIndex]?.url && (
+                  <ReactImageZoom
+                    {...props}
+                    img={productState?.images[currentImageIndex]?.url}
+                  />
+                )}
+                <button className="prev-button" onClick={prevImage}>
+                  &#10094;
+                </button>
+                <button className="next-button" onClick={nextImage}>
+                  &#10095;
+                </button>
               </div>
             </div>
             <div className="other-product-images d-flex flex-wrap gap-15">
-              {productState?.images.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <img src={item?.url} className="img-fluid" alt="" />
-                  </div>
-                );
-              })}
+              {productState?.images.map((item, index) => (
+                <div key={index}>
+                  <img src={item?.url} className="img-fluid" alt="" />
+                </div>
+              ))}
             </div>
           </div>
           <div className="col-6">
@@ -177,7 +182,7 @@ const SingleProduct = () => {
               <div className="border-bottom py-3">
                 <p className="price">
                   {productState?.price
-                    ? (productState.price).toLocaleString("vi-VN")
+                    ? productState.price.toLocaleString("vi-VN")
                     : 0}
                   ₫
                 </p>
@@ -198,7 +203,7 @@ const SingleProduct = () => {
                   Write a Review
                 </a>
               </div>
-              <div className=" py-3">
+              <div className="py-3">
                 <div className="d-flex gap-10 align-items-center my-2">
                   <h3 className="product-heading">Type :</h3>
                   <p className="product-data">{productState?.category}</p>
@@ -215,8 +220,8 @@ const SingleProduct = () => {
                   <h3 className="product-heading">Tags :</h3>
                   <p className="product-data">{productState?.tags}</p>
                 </div>
-                <div className="d-flex gap-10 align-items-center my-2"> 
-                  <h3 className="product-heading">Availablity :</h3>
+                <div className="d-flex gap-10 align-items-center my-2">
+                  <h3 className="product-heading">Availability :</h3>
                   <p className="product-data">In Stock</p>
                 </div>
                 {alreadyAdded === false && (
@@ -248,9 +253,8 @@ const SingleProduct = () => {
                   )}
                   <div
                     className={
-                      alreadyAdded
-                        ? "ms-0"
-                        : "ms-5" + "d-flex align-items-center gap-30"
+                      (alreadyAdded ? "ms-0" : "ms-5") +
+                      " d-flex align-items-center gap-30"
                     }
                   >
                     <button

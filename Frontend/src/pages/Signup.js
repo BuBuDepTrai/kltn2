@@ -10,15 +10,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../features/user/userSlice";
 import logo from "../assets/Black Circle Icon Business Logo (3).png"; // Adjust the path according to your project structure
 
+// Updated Yup schema
 let signUpSchema = yup.object({
   firstname: yup.string().required("First Name is Required"),
   lastname: yup.string().required("Last Name is Required"),
   email: yup
     .string()
-    .required("Email is Required")
-    .email("Email Should be valid"),
-  mobile: yup.number().required().positive().integer("Mobile No is Required"),
-  password: yup.string().required("Password is Required"),
+    .email("Email should be valid")
+    .required("Email is Required"),
+  mobile: yup
+    .string()
+    .matches(/^(\d{10})$/, "Mobile Number must be exactly 10 digits")
+    .required("Mobile Number is Required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .required("Password is Required"),
 });
 
 const Signup = () => {
@@ -36,14 +43,9 @@ const Signup = () => {
     validationSchema: signUpSchema,
     onSubmit: (values) => {
       dispatch(registerUser(values));
+      // Optionally navigate on successful registration
     },
   });
-
-  // useEffect(() => {
-  //   if (authState.createdUser !== null && authState.isError === false) {
-  //     navigate("/login");
-  //   }
-  // }, [authState]);
 
   return (
     <>
@@ -58,7 +60,6 @@ const Signup = () => {
               </div>
               <h3 className="text-center mb-3">Sign Up</h3>
               <form
-                action=""
                 className="d-flex flex-column gap-15"
                 onSubmit={formik.handleSubmit}
               >
@@ -67,8 +68,8 @@ const Signup = () => {
                   name="firstname"
                   placeholder="FirstName"
                   value={formik.values.firstname}
-                  onChange={formik.handleChange("firstname")}
-                  onBlur={formik.handleBlur("firstname")}
+                  onChange={formik.handleChange('firstname')}
+                  onBlur={formik.handleBlur('firstname')}
                 />
                 <div className="error">
                   {formik.touched.firstname && formik.errors.firstname}
@@ -78,8 +79,8 @@ const Signup = () => {
                   name="lastname"
                   placeholder="LastName"
                   value={formik.values.lastname}
-                  onChange={formik.handleChange("lastname")}
-                  onBlur={formik.handleBlur("lastname")}
+                  onChange={formik.handleChange('lastname')}
+                  onBlur={formik.handleBlur('lastname')}
                 />
                 <div className="error">
                   {formik.touched.lastname && formik.errors.lastname}
@@ -89,8 +90,8 @@ const Signup = () => {
                   name="email"
                   placeholder="Email"
                   value={formik.values.email}
-                  onChange={formik.handleChange("email")}
-                  onBlur={formik.handleBlur("email")}
+                  onChange={formik.handleChange('email')}
+                  onBlur={formik.handleBlur('email')}
                 />
                 <div className="error">
                   {formik.touched.email && formik.errors.email}
@@ -100,8 +101,8 @@ const Signup = () => {
                   name="mobile"
                   placeholder="Mobile Number"
                   value={formik.values.mobile}
-                  onChange={formik.handleChange("mobile")}
-                  onBlur={formik.handleBlur("mobile")}
+                  onChange={formik.handleChange('mobile')}
+                  onBlur={formik.handleBlur('mobile')}
                 />
                 <div className="error">
                   {formik.touched.mobile && formik.errors.mobile}
@@ -111,19 +112,17 @@ const Signup = () => {
                   name="password"
                   placeholder="Password"
                   value={formik.values.password}
-                  onChange={formik.handleChange("password")}
-                  onBlur={formik.handleBlur("password")}
+                  onChange={formik.handleChange('password')}
+                  onBlur={formik.handleBlur('password')}
                 />
                 <div className="error">
                   {formik.touched.password && formik.errors.password}
                 </div>
-                <div>
-                  <div className="mt-3 d-flex justify-content-center gap-15 align-items-center">
-                    <button className="button border-0">Sign Up</button>
-                    <Link to="/Login" className="button signup">
-                      Login
-                    </Link>
-                  </div>
+                <div className="mt-3 d-flex justify-content-center gap-15 align-items-center">
+                  <button type="submit" className="button border-0">Sign Up</button>
+                  <Link to="/login" className="button signup">
+                    Login
+                  </Link>
                 </div>
               </form>
             </div>
