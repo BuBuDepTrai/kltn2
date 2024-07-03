@@ -73,7 +73,7 @@ const Productlist = () => {
         <>
           <Link
             to={`/admin/product/${productState[i]._id}`}
-            className=" fs-3 text-success"
+            className="fs-3 text-success"
           >
             <BiEdit />
           </Link>
@@ -96,7 +96,6 @@ const Productlist = () => {
       dispatch(getProducts());
     }, 100);
   };
-  console.log(data1);
   return (
     <div>
       <h3 className="mb-4 title">Products</h3>

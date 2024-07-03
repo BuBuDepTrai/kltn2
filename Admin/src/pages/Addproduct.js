@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import CustomInput from "../components/CustomInput";
 import ReactQuill from "react-quill";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import * as yup from "yup";
@@ -39,8 +39,7 @@ const Addproduct = () => {
   const getProductId = location.pathname.split("/")[3];
   const navigate = useNavigate();
   const [color, setColor] = useState([]);
-  const [images, setImages] = useState([]);
-  console.log(color);
+  //const [images, setImages] = useState([]);
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
@@ -82,7 +81,7 @@ const Addproduct = () => {
     }
     if (isSuccess && updatedProduct) {
       toast.success("Product Updated Successfullly!");
-      navigate("/admin/list-product");
+      //navigate("/admin/list-product");
     }
     if (isError) {
       toast.error("Something Went Wrong!");
@@ -155,6 +154,7 @@ const Addproduct = () => {
     formik.values.images = img;
   }, [color, img]);
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       title: productName || "",
       description: productDesc || "",
@@ -172,19 +172,22 @@ const Addproduct = () => {
       if (getProductId !== undefined) {
         const data = { id: getProductId, productData: values };
         dispatch(updateAProduct(data));
+        setTimeout(() => {
+          navigate('/admin/list-product')
+        }, 1000)
       } else {
         dispatch(createProducts(values));
         formik.resetForm();
         setColor(null);
         setTimeout(() => {
           dispatch(resetState());
+          navigate('/admin/list-product')
         }, 3000);
       }
     },
   });
   const handleColors = (e) => {
     setColor(e);
-    console.log(color);
   };
 
   return (
@@ -356,12 +359,24 @@ const Addproduct = () => {
               );
             })}
           </div>
-          <button
+          {/* <button
             className="btn btn-success border-0 rounded-3 my-5"
             type="submit"
           >
             {getProductId !== undefined ? "Edit" : "Add"} Product
-          </button>
+          </button> */}
+          <div className="text-center">
+            <button className="btn btn-success btn-lg mx-3" type="submit">
+              {getProductId !== undefined ?
+                <>
+                  <i className="fas fa-edit me-1"></i> Edit
+                </>
+                : "Add"} Product
+            </button>
+            <Link to="/admin/list-product" className="btn btn-danger btn-lg mx-3">
+              <i className="fas fa-times me-1"></i> Cancel
+            </Link>
+          </div>
         </form>
       </div>
     </div>
