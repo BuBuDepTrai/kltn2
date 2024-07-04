@@ -93,12 +93,20 @@ export const authSlice = createSlice({
         state.isSuccess = true;
         state.user = action.payload;
         state.message = "success";
+        if (state.isSuccess === true) {
+          localStorage.setItem("token", action.payload.token)
+          toast.success("Login Successfully !");
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
         state.isLoading = false;
+        if (state.isError === true) {
+          console.log(action.payload.response.data.message);
+          toast.error(action.payload.response.data.message)
+        }
       })
       .addCase(getOrders.pending, (state) => {
         state.isLoading = true;

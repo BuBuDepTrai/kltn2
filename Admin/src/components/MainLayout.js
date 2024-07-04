@@ -11,19 +11,20 @@ import {
 import { RiCouponLine } from "react-icons/ri";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { ImBlog } from "react-icons/im";
-import { IoIosNotifications } from "react-icons/io";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
 import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
+  const authState = useSelector((state) => state?.auth?.user)
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -192,7 +193,7 @@ const MainLayout = () => {
             }
           )}
           <div className="d-flex gap-4 align-items-center">
-            <div className="d-flex gap-3 align-items-center dropdown">
+            <div className="d-flex gap-3 align-items-center">
               {/* Dropdown content */}
               <div>
                 <img
@@ -202,14 +203,9 @@ const MainLayout = () => {
                   alt=""
                 />
               </div>
-              <div
-                role="button"
-                id="dropdownMenuLink"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <h5 className="mb-0">Admin</h5>
-                <p className="mb-0">ntkiet11082002@gmail.com</p>
+              <div className="dropdownMenuLink">
+                <h5 className='mb-0'>{authState?.firstname + " " + authState?.lastname}</h5>
+                <p className='mb-0'>{authState?.email}</p>
               </div>
             </div>
           </div>

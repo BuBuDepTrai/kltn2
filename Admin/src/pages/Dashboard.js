@@ -42,7 +42,6 @@ const Dashboard = () => {
   const monthlyDataState = useSelector((state) => state?.auth?.monthlyData);
   const yearlyDataState = useSelector((state) => state?.auth?.yearlyData);
   const orderState = useSelector((state) => state?.auth?.orders?.orders);
-  console.log(orderState);
 
   const [dataMonthly, setDataMonthly] = useState([]);
   const [dataMonthlySales, setDataMonthlySales] = useState([]);

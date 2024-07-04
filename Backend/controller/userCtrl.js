@@ -73,35 +73,80 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 // admin login
 
+// const loginAdmin = asyncHandler(async (req, res) => {
+//   const { email, password } = req.body;
+//   // check if user exists or not
+//   const findAdmin = await User.findOne({ email });
+//   if (findAdmin.role !== "admin") throw new Error("Not Authorised");
+//   if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
+//     const refreshToken = await generateRefreshToken(findAdmin?._id);
+//     const updateuser = await User.findByIdAndUpdate(
+//       findAdmin.id,
+//       {
+//         refreshToken: refreshToken,
+//       },
+//       { new: true }
+//     );
+//     res.cookie("refreshToken", refreshToken, {
+//       httpOnly: true,
+//       maxAge: 72 * 60 * 60 * 1000,
+//     });
+//     res.json({
+//       _id: findAdmin?._id,
+//       firstname: findAdmin?.firstname,
+//       lastname: findAdmin?.lastname,
+//       email: findAdmin?.email,
+//       mobile: findAdmin?.mobile,
+//       token: generateToken(findAdmin?._id),
+//     });
+//   } else {
+//     throw new Error("Invalid Credentials");
+//   }
+// });
 const loginAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  // check if user exists or not
+
+  // Kiểm tra xem người dùng có tồn tại không
   const findAdmin = await User.findOne({ email });
-  if (findAdmin.role !== "admin") throw new Error("Not Authorised");
-  if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
-    const refreshToken = await generateRefreshToken(findAdmin?._id);
-    const updateuser = await User.findByIdAndUpdate(
-      findAdmin.id,
-      {
-        refreshToken: refreshToken,
-      },
-      { new: true }
-    );
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 72 * 60 * 60 * 1000,
-    });
-    res.json({
-      _id: findAdmin?._id,
-      firstname: findAdmin?.firstname,
-      lastname: findAdmin?.lastname,
-      email: findAdmin?.email,
-      mobile: findAdmin?.mobile,
-      token: generateToken(findAdmin?._id),
-    });
-  } else {
-    throw new Error("Invalid Credentials");
+  if (!findAdmin) {
+    return res.status(401).json({ message: "Invalid Credentials" });
   }
+
+  // Kiểm tra mật khẩu
+  const isPasswordMatched = await findAdmin.isPasswordMatched(password);
+  if (!isPasswordMatched) {
+    return res.status(401).json({ message: "Invalid Credentials" });
+  }
+
+  // Kiểm tra vai trò admin
+  if (findAdmin.role !== 'admin') {
+    return res.status(401).json({ message: "You are not Admin" });
+  }
+
+  // Tạo refresh token và cập nhật người dùng
+  const refreshToken = await generateRefeshToken(findAdmin?.id);
+  const updateAdmin = await User.findByIdAndUpdate(findAdmin.id, {
+    refreshToken: refreshToken,
+  }, {
+    new: true
+  });
+
+  // Thiết lập cookie refresh token
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    maxAge: 72 * 60 * 60 * 1000,
+  });
+
+  // Trả về thông tin người dùng và token
+  res.json({
+    _id: findAdmin?._id,
+    firstname: findAdmin?.firstname,
+    lastname: findAdmin?.lastname,
+    email: findAdmin?.email,
+    mobile: findAdmin?.mobile,
+    token: generateToken(findAdmin?._id),
+    role: findAdmin?.role,
+  });
 });
 
 // handle refresh token
@@ -438,7 +483,7 @@ const createOrder = asyncHandler(async (req, res) => {
     paymentInfo,
   } = req.body;
   const { _id } = req.user;
-  
+
   try {
     const order = await Order.create({
       shippingInfo,
