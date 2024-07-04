@@ -124,7 +124,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
   }
 
   // Tạo refresh token và cập nhật người dùng
-  const refreshToken = await generateRefeshToken(findAdmin?.id);
+  const refreshToken = await generateRefreshToken(findAdmin?.id);
   const updateAdmin = await User.findByIdAndUpdate(findAdmin.id, {
     refreshToken: refreshToken,
   }, {
