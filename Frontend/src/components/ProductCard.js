@@ -28,6 +28,10 @@ const ProductCard = (props) => {
   const isProductInWishlist = (productId) => wishlist.some((item) => item._id === productId);
   const isProductInCompareList = (productId) => compareList.some((item) => item._id === productId);
 
+  const handleWishlistToggle = (productId) => {
+    dispatch(addToWishlist(productId));
+  };
+
   const addToCompare = (productId) => {
     dispatch(toggleCompare(productId));
   };
@@ -42,7 +46,10 @@ const ProductCard = (props) => {
           <div key={index} className={` ${location.pathname === "/product" ? `gr-${grid}` : "col-3"} `}>
             <div className="product-card position-relative">
               <div className="wishlist-icon position-absolute">
-                <button className="border-0 bg-transparent" onClick={() => dispatch(addToWishlist(item?._id))}>
+                <button
+                  className="border-0 bg-transparent"
+                  onClick={() => handleWishlistToggle(item?._id)}
+                >
                   {isWishlist ? <AiFillHeart className="fs-5 me-1" /> : <AiOutlineHeart className="fs-5 me-1" />}
                 </button>
               </div>

@@ -73,7 +73,7 @@ const Productlist = () => {
         <>
           <Link
             to={`/admin/product/${productState[i]._id}`}
-            className=" fs-3 text-success"
+            className="fs-3 text-success"
           >
             <BiEdit />
           </Link>

@@ -18,7 +18,6 @@ import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
@@ -35,7 +34,7 @@ const MainLayout = () => {
     localStorage.clear();
     window.location.reload();
   };
-
+const authState = useSelector((state) => state?.auth?.user)
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -203,9 +202,14 @@ const MainLayout = () => {
                   alt=""
                 />
               </div>
-              <div className="dropdownMenuLink">
-                <h5 className='mb-0'>{authState?.firstname + " " + authState?.lastname}</h5>
-                <p className='mb-0'>{authState?.email}</p>
+              <div
+                role="button"
+                id="dropdownMenuLink"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <h5 className="mb-0">Admin</h5>
+                <p className="mb-0">ntkiet11082002@gmail.com</p>
               </div>
             </div>
           </div>

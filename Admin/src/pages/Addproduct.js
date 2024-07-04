@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import CustomInput from "../components/CustomInput";
 import ReactQuill from "react-quill";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import * as yup from "yup";
@@ -148,6 +149,7 @@ const Addproduct = () => {
 
   const formik = useFormik({
     enableReinitialize: true,
+    enableReinitialize: true,
     initialValues: {
       title: productName || "",
       description: productDesc || "",
@@ -165,6 +167,9 @@ const Addproduct = () => {
       if (getProductId !== undefined) {
         const data = { id: getProductId, productData: values };
         dispatch(updateAProduct(data));
+        setTimeout(() => {
+          navigate('/admin/list-product')
+        }, 1000)
       } else {
         dispatch(createProducts(values));
         formik.resetForm();

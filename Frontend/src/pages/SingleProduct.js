@@ -32,7 +32,6 @@ const SingleProduct = () => {
   const cartState = useSelector((state) => state?.auth?.cartProducts);
   const authState = useSelector((state) => state?.auth);
   const wishlistState = useSelector((state) => state?.auth?.wishlist?.wishlist);
-  console.log(wishlistState);
 
   useEffect(() => {
     dispatch(getAProduct(getProductId));
@@ -75,7 +74,6 @@ const SingleProduct = () => {
 
   const [orderedProduct, setOrderedProduct] = useState(true);
   const copyToClipboard = (text) => {
-    console.log("text", text);
     var textField = document.createElement("textarea");
     textField.innerText = text;
     document.body.appendChild(textField);
@@ -154,6 +152,25 @@ const SingleProduct = () => {
     }
   }, [productState, productsState, getProductId]);
 
+  // State and logic for related products by brand
+  const [relatedByBrand, setRelatedByBrand] = useState([]);
+
+  useEffect(() => {
+    if (productState?.brand) {
+      const categories = new Set();
+      const filteredProducts = productsState.filter((product) => {
+        if (product.brand === productState.brand && product._id !== getProductId) {
+          if (!categories.has(product.category)) {
+            categories.add(product.category);
+            return true;
+          }
+        }
+        return false;
+      });
+      setRelatedByBrand(filteredProducts);
+    }
+  }, [productState, productsState, getProductId]);
+
   return (
     <>
       <Meta title={"Product Name"} />
@@ -162,17 +179,25 @@ const SingleProduct = () => {
         <div className="row">
           <div className="col-6">
             <div className="main-product-image">
-              <div className="image-container">
+              <div className="image-container" style={{ position: "relative" }}>
                 {productState?.images[currentImageIndex]?.url && (
                   <ReactImageZoom
                     {...props}
                     img={productState?.images[currentImageIndex]?.url}
                   />
                 )}
-                <button className="prev-button" onClick={prevImage}>
+                <button
+                  className="prev-button"
+                  onClick={prevImage}
+                  style={prevButtonStyle}
+                >
                   &#10094;
                 </button>
-                <button className="next-button" onClick={nextImage}>
+                <button
+                  className="next-button"
+                  onClick={nextImage}
+                  style={nextButtonStyle}
+                >
                   &#10095;
                 </button>
               </div>
@@ -421,6 +446,16 @@ const SingleProduct = () => {
           </div>
         </div>
       </Container>
+      <Container class1="related-wrapper py-5 home-wrapper-2">
+        <div className="row">
+          <div className="col-12">
+            <h3 className="section-heading">Sản phẩm liên quan</h3>
+          </div>
+        </div>
+        <div className="row">
+          <ProductCard data={relatedByBrand} />
+        </div>
+      </Container>
       <Container class1="popular-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-12">
@@ -431,6 +466,7 @@ const SingleProduct = () => {
           <ProductCard data={popularProduct} />
         </div>
       </Container>
+      
       <Container class1="related-wrapper py-5 home-wrapper-2">
         <div className="row">
           <div className="col-12">
@@ -441,34 +477,34 @@ const SingleProduct = () => {
           <ProductCard data={relatedProducts} />
         </div>
       </Container>
-      <style jsx>{`
-        .image-container {
-          position: relative;
-        }
-
-        .prev-button,
-        .next-button {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          background-color: rgba(0, 0, 0, 0.5);
-          color: white;
-          border: none;
-          padding: 10px;
-          cursor: pointer;
-          z-index: 1;
-        }
-
-        .prev-button {
-          left: 0;
-        }
-
-        .next-button {
-          right: 0;
-        }
-      `}</style>
     </>
   );
+};
+
+const prevButtonStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "10px",  // Adjust this value to move the button further to the left
+  transform: "translateY(-50%)",
+  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  color: "white",
+  border: "none",
+  padding: "10px",
+  cursor: "pointer",
+  zIndex: 1,
+};
+
+const nextButtonStyle = {
+  position: "absolute",
+  top: "50%",
+  right: "10px",  // Adjust this value to move the button further to the right
+  transform: "translateY(-50%)",
+  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  color: "white",
+  border: "none",
+  padding: "10px",
+  cursor: "pointer",
+  zIndex: 1,
 };
 
 export default SingleProduct;

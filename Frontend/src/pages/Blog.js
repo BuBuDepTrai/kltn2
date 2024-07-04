@@ -1,21 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import BlogCard from "../components/BlogCard";
 import Container from "../components/Container";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBlogs } from "../features/blogs/blogSlice";
+import { getAllBlogs, getBlogCategories } from "../features/blogs/blogSlice";
 import moment from "moment";
 
 const Blog = () => {
   const blogState = useSelector((state) => state?.blog?.blog);
+  const categoryState = useSelector((state) => state?.blog?.categories);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    getblogs();
+    getBlogs();
+    getCategories();
   }, []);
-  const getblogs = () => {
+
+  const getBlogs = () => {
     dispatch(getAllBlogs());
+  };
+
+  const getCategories = () => {
+    dispatch(getBlogCategories());
   };
 
   return (
@@ -29,10 +36,10 @@ const Blog = () => {
               <h3 className="filter-title">Find By Categories</h3>
               <div>
                 <ul className="ps-0">
-                  <li>Watch</li>
-                  <li>Tv</li>
-                  <li>Camera</li>
-                  <li>Laptop</li>
+                  {categoryState &&
+                    categoryState.map((category, index) => (
+                      <li key={index}>{category}</li>
+                    ))}
                 </ul>
               </div>
             </div>
@@ -40,21 +47,17 @@ const Blog = () => {
           <div className="col-9">
             <div className="row">
               {blogState &&
-                blogState?.map((item, index) => {
-                  return (
-                    <div className="col-6 mb-3" key={index}>
-                      <BlogCard
-                        id={item?._id}
-                        title={item?.title}
-                        description={item?.description}
-                        image={item?.images[0]?.url}
-                        date={moment(item?.createdAt).format(
-                          "MMMM Do YYYY, h:mm a"
-                        )}
-                      />
-                    </div>
-                  );
-                })}
+                blogState.map((item, index) => (
+                  <div className="col-6 mb-3" key={index}>
+                    <BlogCard
+                      id={item?._id}
+                      title={item?.title}
+                      description={item?.description}
+                      image={item?.images[0]?.url}
+                      date={moment(item?.createdAt).format("MMMM Do YYYY, h:mm a")}
+                    />
+                  </div>
+                ))}
             </div>
           </div>
         </div>
