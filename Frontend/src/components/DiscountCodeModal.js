@@ -4,9 +4,9 @@ import { Modal, Button } from 'react-bootstrap';
 
 const DiscountCodeModal = ({ show, handleClose, handleSelectCode }) => {
   const discountCodes = [
-    { code: 'FEE10K', description: 'Giảm 10% cho tất cả đơn hàng', amount: 50000, expiry: '28 tháng 07 2028' },
-    { code: 'GIAM500K', description: 'Giảm 5% cho tất cả đơn hàng', amount: 10000, expiry: '02 tháng 09 2024' },
-    { code: 'GIAM200K', description: 'Giảm 5% cho tất cả đơn hàng', amount: 20000, expiry: '02 tháng 09 2024' },
+    { code: 'FEE50K', description: 'Giảm 10% cho tất cả đơn hàng tối đa 50K', amount: 50000, expiry: '28 tháng 07 2028' },
+    { code: 'GIAM100K', description: 'Giảm 15% cho tất cả đơn hàng tối đa 100K', amount: 100000, expiry: '02 tháng 09 2024' },
+    { code: 'GIAM200K', description: 'Giảm 20% cho tất cả đơn hàng tối đa 200K', amount: 200000, expiry: '02 tháng 09 2024' },
     // Add more discount codes here
   ];
 
