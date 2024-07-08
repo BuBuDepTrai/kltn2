@@ -11,6 +11,8 @@ const Blog = () => {
   const blogState = useSelector((state) => state?.blog?.blog);
   const categoryState = useSelector((state) => state?.blog?.categories);
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const dispatch = useDispatch();
   useEffect(() => {
     getBlogs();
@@ -25,6 +27,14 @@ const Blog = () => {
     dispatch(getBlogCategories());
   };
 
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredBlogs = selectedCategory
+    ? blogState.filter((blog) => blog.category === selectedCategory)
+    : blogState;
+
   return (
     <>
       <Meta title={"Blogs"} />
@@ -36,9 +46,12 @@ const Blog = () => {
               <h3 className="filter-title">Find By Categories</h3>
               <div>
                 <ul className="ps-0">
+                  <li onClick={() => handleCategoryClick(null)}>All</li>
                   {categoryState &&
                     categoryState.map((category, index) => (
-                      <li key={index}>{category}</li>
+                      <li key={index} onClick={() => handleCategoryClick(category)}>
+                        {category}
+                      </li>
                     ))}
                 </ul>
               </div>
@@ -46,8 +59,8 @@ const Blog = () => {
           </div>
           <div className="col-9">
             <div className="row">
-              {blogState &&
-                blogState.map((item, index) => (
+              {filteredBlogs &&
+                filteredBlogs.map((item, index) => (
                   <div className="col-6 mb-3" key={index}>
                     <BlogCard
                       id={item?._id}

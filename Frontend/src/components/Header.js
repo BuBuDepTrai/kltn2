@@ -67,8 +67,30 @@ const Header = () => {
     window.location.reload();
   };
 
-  // Define the categories and setCategory variables
-  
+  // Function to scroll to the top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // State to manage the visibility of the scroll-to-top button
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Show or hide the button based on the scroll position
+  const toggleVisibility = () => {
+    if (window.pageYOffset > 300) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+    return () => {
+      window.removeEventListener("scroll", toggleVisibility);
+    };
+  }, []);
+
   return (
     <>
       <header className="header-top-strip py-3">
@@ -239,6 +261,28 @@ const Header = () => {
           </div>
         </div>
       </header>
+      {/* Scroll to Top Button */}
+      {isVisible && (
+        <button
+          onClick={scrollToTop}
+          style={{
+            position: "fixed",
+            bottom: "150px",
+            right: "25px",
+            backgroundColor: "#ff5a5a",
+            color: "white",
+            border: "none",
+            borderRadius: "50%",
+            width: "50px",
+            height: "50px",
+            fontSize: "24px",
+            cursor: "pointer",
+            zIndex: 1000,
+          }}
+        >
+          ↑
+        </button>
+      )}
     </>
   );
 };

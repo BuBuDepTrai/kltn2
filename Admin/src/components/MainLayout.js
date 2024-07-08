@@ -19,6 +19,7 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import logo from "../assets/Remove-bg.ai_1720413887960.png";
 
 const { Header, Sider, Content } = Layout;
 
@@ -39,9 +40,8 @@ const MainLayout = () => {
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
-          <h2 className="text-white fs-5 text-center py-3 mb-0">
-            <span className="sm-logo">CC</span>
-            <span className="lg-logo">A2K</span>
+          <h2 className="text-white fs-5 text-center py-0 mb-0">
+            <img src={logo} alt="Logo" style={{ width: "80px", height: "auto" }} />
           </h2>
         </div>
         <Menu
@@ -50,13 +50,12 @@ const MainLayout = () => {
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
             if (key === "signout") {
-              handleLogout(); // Call handleLogout when Sign Out is clicked
+              handleLogout(); 
             } else {
               navigate(key);
             }
           }}
           items={[
-            // Your menu items configuration
             {
               key: "",
               icon: <AiOutlineDashboard className="fs-4" />,
