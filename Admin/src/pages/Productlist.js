@@ -57,7 +57,7 @@ const Productlist = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts());
-  }, []);
+  }, [dispatch]);
   const productState = useSelector((state) => state?.product?.products);
   const data1 = [];
   for (let i = 0; i < productState.length; i++) {
@@ -68,7 +68,7 @@ const Productlist = () => {
       category: productState[i].category,
       color: productState[i].color,
       quantity: productState[i].quantity,
-      price: `${productState[i].price}`,
+      price: productState[i].price,
       action: (
         <>
           <Link
@@ -90,11 +90,10 @@ const Productlist = () => {
   const deleteProduct = (e) => {
     dispatch(deleteAProduct(e));
     dispatch(delImg(e));
-
     setOpen(false);
     setTimeout(() => {
       dispatch(getProducts());
-    }, 100);
+    }, 300);
   };
   return (
     <div>

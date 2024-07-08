@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../features/user/userSlice";
-import logo from "../assets/Black Circle Icon Business Logo (3).png"; // Adjust the path according to your project structure
+import logo from "../assets/Remove-bg.ai_1720413887960.png"; // Adjust the path according to your project structure
 
 // Updated Yup schema
 let signUpSchema = yup.object({

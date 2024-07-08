@@ -39,12 +39,12 @@ const Addproduct = () => {
   const getProductId = location.pathname.split("/")[3];
   const navigate = useNavigate();
   const [color, setColor] = useState([]);
-  //const [images, setImages] = useState([]);
+
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
-  }, []);
+  }, [dispatch]);
 
   const brandState = useSelector((state) => state.brand.brands);
   const catState = useSelector((state) => state.pCategory.pCategories);
@@ -74,19 +74,18 @@ const Addproduct = () => {
     } else {
       dispatch(resetState());
     }
-  }, [getProductId]);
+  }, [getProductId, dispatch]);
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success("Product Added Successfullly!");
     }
     if (isSuccess && updatedProduct) {
       toast.success("Product Updated Successfullly!");
-      //navigate("/admin/list-product");
     }
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading]);
+  }, [isSuccess, isError, isLoading, createdProduct, updatedProduct]);
   const coloropt = [];
   colorState.forEach((i) => {
     coloropt.push({
@@ -133,14 +132,6 @@ const Addproduct = () => {
     });
   });
 
-  const img = [];
-  imgState?.forEach((i) => {
-    img.push({
-      public_id: i.public_id,
-      url: i.url,
-    });
-  });
-
   const imgshow = [];
   productImages?.forEach((i) => {
     imgshow.push({
@@ -149,11 +140,14 @@ const Addproduct = () => {
     });
   });
 
+
   useEffect(() => {
     formik.values.color = color ? color : " ";
-    formik.values.images = img;
-  }, [color, img]);
+    //formik.values.images = img;
+  }, [color]);
+
   const formik = useFormik({
+    enableReinitialize: true,
     enableReinitialize: true,
     initialValues: {
       title: productName || "",
@@ -162,9 +156,9 @@ const Addproduct = () => {
       brand: productBrand || "",
       category: productCategory || "",
       tags: productTag || "",
-      color: productColors || "",
+      color: productColors || [],
       quantity: productQuantity || "",
-      images: productImages || "",
+      images: productImages || [],
     },
     validationSchema: schema,
     onSubmit: (values) => {
@@ -178,12 +172,12 @@ const Addproduct = () => {
       } else {
         dispatch(createProducts(values));
         formik.resetForm();
-        setColor(null);
-        setTimeout(() => {
-          dispatch(resetState());
-          navigate('/admin/list-product')
-        }, 3000);
       }
+      setTimeout(() => {
+        setColor(null)
+        dispatch(resetState());
+        navigate('/admin/list-product');
+      }, 1000);
     },
   });
   const handleColors = (e) => {
@@ -332,19 +326,6 @@ const Addproduct = () => {
             </Dropzone>
           </div>
           <div className="showimages d-flex flex-wrap gap-3">
-            {imgshow?.map((i, j) => {
-              return (
-                <div className=" position-relative" key={j}>
-                  <button
-                    type="button"
-                    onClick={() => dispatch(delImg(i.public_id))}
-                    className="btn-close position-absolute"
-                    style={{ top: "10px", right: "10px" }}
-                  ></button>
-                  <img src={i.url} alt="" width={200} height={200} />
-                </div>
-              );
-            })}
             {imgState?.map((i, j) => {
               return (
                 <div className=" position-relative" key={j}>
@@ -358,20 +339,23 @@ const Addproduct = () => {
                 </div>
               );
             })}
+            {imgshow?.map((i, j) => {
+              return (
+                <div className=" position-relative" key={j}>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(delImg(i.public_id))}
+                    className="btn-close position-absolute"
+                    style={{ top: "10px", right: "10px" }}
+                  ></button>
+                  <img src={i.url} alt="" width={200} height={200} />
+                </div>
+              );
+            })}
           </div>
-          {/* <button
-            className="btn btn-success border-0 rounded-3 my-5"
-            type="submit"
-          >
-            {getProductId !== undefined ? "Edit" : "Add"} Product
-          </button> */}
           <div className="text-center">
             <button className="btn btn-success btn-lg mx-3" type="submit">
-              {getProductId !== undefined ?
-                <>
-                  <i className="fas fa-edit me-1"></i> Edit
-                </>
-                : "Add"} Product
+              {getProductId !== undefined ? <><i className="fas fa-edit me-1"></i> Edit</> : "Add"} Product
             </button>
             <Link to="/admin/list-product" className="btn btn-danger btn-lg mx-3">
               <i className="fas fa-times me-1"></i> Cancel

@@ -11,6 +11,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { getAProduct } from "../features/products/productSlilce";
 import { getUserCart } from "../features/user/userSlice";
+import logo from "../assets/Remove-bg.ai_1720413887960.png";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -93,7 +94,7 @@ const Header = () => {
             <div className="col-2">
               <h2>
                 <Link className="text-white" to="/ ">
-                  A2K
+                <img src={logo} alt="Logo" style={{ width: "100px", height: "auto" }} />
                 </Link>
               </h2>
             </div>

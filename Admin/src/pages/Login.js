@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import CustomInput from "../components/CustomInput";
-import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../features/auth/authSlice";
-import logo from "../assets/Black Circle Icon Business Logo (3).png"; // Adjust the path as needed
+import logo from "../assets/Remove-bg.ai_1720413887960.png"; // Adjust the path as needed
+import { ToastContainer } from "react-toastify";
 
 let schema = yup.object().shape({
   email: yup
@@ -17,7 +17,6 @@ let schema = yup.object().shape({
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -35,63 +34,68 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       window.location.href = "/admin";
-    } else {
-      navigate("");
     }
   }, [user, isError, isSuccess, isLoading]);
 
   return (
-    <div style={styles.container}>
-      <div style={styles.leftPanel}>
-        <div style={styles.leftContent}>
-          <h1>A2K</h1>
-          <p>
-            ¡Descubre, comparte y conecta con la vibrante comunidad literaria
-            que hemos creado para ti!
-          </p>
+    <>
+      <ToastContainer
+        position='top-right'
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme='light' />
+      <div style={styles.container}>
+        <div style={styles.leftPanel}>
+          <div style={styles.leftContent}>
+            <h1>A2K</h1>
+          </div>
+        </div>
+        <div style={styles.rightPanel}>
+          <div style={styles.loginFormContainer}>
+            <img src={logo} alt="A2K Logo" style={styles.logo} />
+            <h3 style={styles.loginTitle}>Welcome to A2K</h3>
+            <form onSubmit={formik.handleSubmit}>
+              <CustomInput
+                type="text"
+                label="email"
+                id="email"
+                name="email"
+                onChng={formik.handleChange("email")}
+                onBlr={formik.handleBlur("email")}
+                val={formik.values.email}
+              />
+              <div style={styles.error}>
+                {formik.touched.email && formik.errors.email}
+              </div>
+              <CustomInput
+                type="password"
+                label="password"
+                id="pass"
+                name="password"
+                onChng={formik.handleChange("password")}
+                onBlr={formik.handleBlur("password")}
+                val={formik.values.password}
+              />
+              <div style={styles.error}>
+                {formik.touched.password && formik.errors.password}
+              </div>
+              <div style={styles.rememberMe}>
+                <input type="checkbox" id="rememberMe" name="rememberMe" />
+                <label htmlFor="rememberMe">Remember Me</label>
+              </div>
+              <button style={styles.loginButton} type="submit">
+                Login
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-      <div style={styles.rightPanel}>
-        <div style={styles.loginFormContainer}>
-          <img src={logo} alt="A2K Logo" style={styles.logo} />
-          <h3 style={styles.loginTitle}>Welcome to A2K</h3>
-          <p>Đăng nhập và bắt đầu khám phá những điều thú vị !!!</p>
-          <form onSubmit={formik.handleSubmit}>
-            <CustomInput
-              type="text"
-              label="email"
-              id="email"
-              name="email"
-              onChng={formik.handleChange("email")}
-              onBlr={formik.handleBlur("email")}
-              val={formik.values.email}
-            />
-            <div style={styles.error}>
-              {formik.touched.email && formik.errors.email}
-            </div>
-            <CustomInput
-              type="password"
-              label="password"
-              id="pass"
-              name="password"
-              onChng={formik.handleChange("password")}
-              onBlr={formik.handleBlur("password")}
-              val={formik.values.password}
-            />
-            <div style={styles.error}>
-              {formik.touched.password && formik.errors.password}
-            </div>
-            <div style={styles.rememberMe}>
-              <input type="checkbox" id="rememberMe" name="rememberMe" />
-              <label htmlFor="rememberMe">Remember Me</label>
-            </div>
-            <button style={styles.loginButton} type="submit">
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
