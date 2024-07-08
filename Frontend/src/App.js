@@ -25,6 +25,7 @@ import { PrivateRoutes } from "./routing/PrivateRoutes";
 import { OpenRoutes } from "./routing/OpenRoutes";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
+import VNPayReturn from "./pages/VNPayReturn";
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
             <Route path="refund-policy" element={<RefundPloicy />} />
             <Route path="shipping-policy" element={<ShippingPolicy />} />
             <Route path="term-conditions" element={<TermAndContions />} />
+            <Route path="vnpay_return" element={<VNPayReturn />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -45,15 +45,15 @@ var orderSchema = new mongoose.Schema(
     paymentInfo: {
       vnpayOrderId: {
         type: String,
-        required: function() {
-          return this.paymentMethod === "VNPay";
-        },
+        // required: function() {
+        //   return this.paymentMethod === "VNPay";
+        // },
       },
       vnpayPaymentId: {
         type: String,
-        required: function() {
-          return this.paymentMethod === "VNPay";
-        },
+        // required: function() {
+        //   return this.paymentMethod === "VNPay";
+        // },
       },
     },
     orderItems: [
