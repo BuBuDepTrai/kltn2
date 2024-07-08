@@ -131,6 +131,21 @@ const emptyCart = async (data) => {
   }
 };
 
+const paymentVerification = async (params) => {
+  const response = await axios.post(
+    `${base_url}user/order/paymentVerification`,
+    {},
+    {
+      ...config,
+      params,
+    }
+  );
+
+  if (response.data) {
+    return response.data;
+  }
+};
+
 export const authService = {
   register,
   login,
@@ -145,4 +160,5 @@ export const authService = {
   forgotPasswordToken,
   resetPass,
   emptyCart,
+  paymentVerification,
 };
