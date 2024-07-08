@@ -27,6 +27,7 @@ const OurStore = () => {
     let newBrands = [];
     let category = [];
     let newtags = [];
+    console.log("check",productState)
 
     for (let index = 0; index < productState?.length; index++) {
       const element = productState[index];

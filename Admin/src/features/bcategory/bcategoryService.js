@@ -3,7 +3,11 @@ import { base_url } from "../../utils/baseUrl";
 import { config } from "../../utils/axiosconfig";
 
 const getBlogCategories = async () => {
-  const response = await axios.get(`${base_url}blogcategory/`);
+  const response = await axios.get(`${base_url}blogcategory/`, {
+    headers: {
+      "ngrok-skip-browser-warning": "69420"
+    }
+  });
 
   return response.data;
 };

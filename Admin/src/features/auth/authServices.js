@@ -7,7 +7,11 @@ import { base_url } from "../../utils/baseUrl";
 //   : null;
 
 const login = async (user) => {
-  const response = await axios.post(`${base_url}user/admin-login`, user);
+  const response = await axios.post(`${base_url}user/admin-login`, user, {
+    headers: {
+      "ngrok-skip-browser-warning": "69420"
+    }
+  });
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
@@ -42,7 +46,11 @@ const getMonthlyOrders = async (data) => {
   const response = await axios.get(
     `${base_url}user/getMonthWiseOrderIncome`,
 
-    data
+    data,{
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    }
   );
 
   return response.data;
@@ -52,7 +60,11 @@ const getYearlyStats = async (data) => {
   const response = await axios.get(
     `${base_url}user/getyearlyorders`,
 
-    data
+    data,{
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    }
   );
 
   return response.data;

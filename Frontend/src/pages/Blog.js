@@ -9,14 +9,22 @@ import moment from "moment";
 
 const Blog = () => {
   const blogState = useSelector((state) => state?.blog?.blog);
-  const categoryState = useSelector((state) => state?.blog?.categories);
+  const categoryState = useSelector((state) => state?.blog?.blog);
+
 
   const [selectedCategory, setSelectedCategory] = useState(null);
+  //const [categoryState, setCategoryState] = useState("")
 
   const dispatch = useDispatch();
   useEffect(() => {
     getBlogs();
     getCategories();
+    
+    // blogState?.map((item) => {
+    //   console.log(item.category)
+    //   setCategoryState(item.category)
+    // })
+    console.log("check", blogState.category)
   }, []);
 
   const getBlogs = () => {
@@ -50,7 +58,7 @@ const Blog = () => {
                   {categoryState &&
                     categoryState.map((category, index) => (
                       <li key={index} onClick={() => handleCategoryClick(category)}>
-                        {category}
+                        {category.category}
                       </li>
                     ))}
                 </ul>

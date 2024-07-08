@@ -33,7 +33,7 @@ const Header = () => {
       Authorization: `Bearer ${
         getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
       }`,
-      Accept: "application/json",
+      "ngrok-skip-browser-warning": "69420"
     },
   };
 

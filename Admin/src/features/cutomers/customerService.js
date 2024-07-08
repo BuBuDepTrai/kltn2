@@ -3,7 +3,11 @@ import { base_url } from "../../utils/baseUrl";
 
 const getUsers = async () => {
   try {
-    const response = await axios.get(`${base_url}user/all-users`);
+    const response = await axios.get(`${base_url}user/all-users`, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || error.message);
@@ -12,7 +16,11 @@ const getUsers = async () => {
 
 const blockUser = async (Id) => {
   try {
-    const response = await axios.put(`${base_url}user/block-user/${Id}`);
+    const response = await axios.put(`${base_url}user/block-user/${Id}`, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    });
     return response.data;
   } catch (error) {
     console.error("Error in blockUser:", error.response || error.message);
@@ -22,7 +30,11 @@ const blockUser = async (Id) => {
 
 const unblockUser = async (Id) => {
   try {
-    const response = await axios.put(`${base_url}user/unblock-user/${Id}`);
+    const response = await axios.put(`${base_url}user/unblock-user/${Id}`, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    });
     return response.data;
   } catch (error) {
     console.error("Error in unblockUser:", error.response || error.message);
@@ -38,6 +50,7 @@ const updateUser = async (data, token) => {
       {
         headers: {
           Authorization: `Bearer ${token}`, // Ensure the headers are included
+          "ngrok-skip-browser-warning": "69420"
         },
       }
     );

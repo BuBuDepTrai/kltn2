@@ -28,6 +28,7 @@ const Profile = () => {
         getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
       }`,
       Accept: "application/json",
+      "ngrok-skip-browser-warning": "69420"
     },
   };
   const dispatch = useDispatch();

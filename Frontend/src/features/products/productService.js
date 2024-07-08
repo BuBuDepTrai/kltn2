@@ -10,7 +10,11 @@ const getProducts = async (data) => {
       data?.minPrice ? `price[gte]=${data?.minPrice}&&` : ""
     }${data?.maxPrice ? `price[lte]=${data?.maxPrice}&&` : ""}${
       data?.sort ? `sort=${data?.sort}&&` : ""
-    }`
+    }`, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    }
   );
 
   if (response.data) {
@@ -19,7 +23,11 @@ const getProducts = async (data) => {
 };
 
 const getSingleProduct = async (id) => {
-  const response = await axios.get(`${base_url}product/${id}`);
+  const response = await axios.get(`${base_url}product/${id}`,{
+    headers: {
+      "ngrok-skip-browser-warning": "69420"
+    }
+  });
   if (response.data) {
     return response.data;
   }

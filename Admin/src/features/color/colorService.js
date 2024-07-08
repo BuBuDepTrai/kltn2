@@ -3,7 +3,11 @@ import { base_url } from "../../utils/baseUrl";
 import { config } from "../../utils/axiosconfig";
 
 const getColors = async () => {
-  const response = await axios.get(`${base_url}color/`);
+  const response = await axios.get(`${base_url}color/`, {
+    headers: {
+      "ngrok-skip-browser-warning": "69420"
+    }
+  });
 
   return response.data;
 };

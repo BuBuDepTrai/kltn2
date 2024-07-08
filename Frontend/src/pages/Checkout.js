@@ -52,6 +52,7 @@ const Checkout = () => {
         getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ''
       }`,
       Accept: 'application/json',
+      "ngrok-skip-browser-warning": "69420"
     },
   };
 
@@ -91,7 +92,7 @@ const Checkout = () => {
   const checkOutHandler = async (shippingInfo) => {
     try {
       const result = await axios.post(
-        'http://localhost:5000/api/user/order/checkout',
+        'https://855c-1-53-82-77.ngrok-free.app/api/user/order/checkout',
         {
           amount: totalAmount + shippingCost - discountAmount,
           orderInfo: 'Order from A2K',

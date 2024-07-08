@@ -42,7 +42,11 @@ const removeProductFromCart = async (data) => {
   const response = await axios.delete(
     `${base_url}user/delete-product-cart/${data.id}`,
 
-    data.config2
+    data.config2, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    }
   );
   if (response.data) {
     return response.data;
@@ -94,7 +98,11 @@ const updateUser = async (data) => {
 const forgotPasswordToken = async (data) => {
   const response = await axios.post(
     `${base_url}user/forgot-password-token`,
-    data
+    data, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420"
+      }
+    }
   );
 
   if (response.data) {
