@@ -202,28 +202,39 @@ const logout = asyncHandler(async (req, res) => {
 // Update a user
 
 const updatedUser = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  validateMongoDbId(_id);
+  const { id } = req.params;
+  console.log("data" + id)
+  validateMongoDbId(id);
 
   try {
+    const { email } = req.body;
+
+    // Kiểm tra xem có cập nhật email và email mới không trùng với bất kỳ người dùng nào khác
+    if (email && await User.exists({ email: email, _id: { $ne: id } })) {
+      return res.status(400).json({ message: 'Email is already in use' });
+    }
+
+    const updatedFields = {
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      role: req.body.role
+    };
+
+    // Nếu email không được cập nhật, hoặc được cập nhật nhưng không trùng với bản ghi khác, ta tiến hành cập nhật
     const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      {
-        firstname: req?.body?.firstname,
-        lastname: req?.body?.lastname,
-        email: req?.body?.email,
-        mobile: req?.body?.mobile,
-      },
-      {
-        new: true,
-      }
+      id,
+      updatedFields,
+      { new: true }
     );
+
     res.json(updatedUser);
   } catch (error) {
-    throw new Error(error);
+    console.error('Failed to update user:', error);
+    res.status(500).json({ message: 'Failed to update user' });
   }
 });
-
 // save user Address
 
 const saveAddress = asyncHandler(async (req, res, next) => {

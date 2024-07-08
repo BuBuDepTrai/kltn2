@@ -204,7 +204,7 @@ const MainLayout = () => {
               <div
                 className="dropdownMenuLink"
               >
-                <h5 className="mb-0">{authState?.firsname + " " + authState?.lastname}</h5>
+                <h5 className="mb-0">{authState?.firstname + " " + authState?.lastname}</h5>
                 <p className="mb-0">{authState?.email}</p>
               </div>
             </div>

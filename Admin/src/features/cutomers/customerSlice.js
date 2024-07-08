@@ -19,7 +19,10 @@ export const blockUser = createAsyncThunk(
   "customer/block-user",
   async (userId, thunkAPI) => {
     try {
-      const response = await customerService.blockUser(userId);
+      const token = localStorage.getItem("token"); // Assuming you store the token in the auth state
+      if (!token) throw new Error("No token provided");
+      console.log("Token:", token); // Debugging step
+      const response = await customerService.blockUser(userId, token);
       return response;
     } catch (error) {
       console.error("blockUser error:", error);  // Detailed logging
@@ -32,7 +35,10 @@ export const unblockUser = createAsyncThunk(
   "customer/unblock-user",
   async (userId, thunkAPI) => {
     try {
-      const response = await customerService.unblockUser(userId);
+      const token = localStorage.getItem("token"); // Assuming you store the token in the auth state
+      if (!token) throw new Error("No token provided");
+      console.log("Token:", token); // Debugging step
+      const response = await customerService.unblockUser(userId, token);
       return response;
     } catch (error) {
       console.error("unblockUser error:", error);  // Detailed logging
@@ -45,7 +51,7 @@ export const updateUser = createAsyncThunk(
   "customer/edit-user",
   async (user, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.token; // Assuming you store the token in the auth state
+      const token = localStorage.getItem("token"); // Assuming you store the token in the auth state
       if (!token) throw new Error("No token provided");
       console.log("Token:", token); // Debugging step
       const response = await customerService.updateUser(user, token);

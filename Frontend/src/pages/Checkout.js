@@ -100,7 +100,7 @@ const Checkout = () => {
   const checkOutHandler = async (shippingInfo) => {
     try {
       const result = await axios.post(
-        'https://855c-1-53-82-77.ngrok-free.app/api/user/order/checkout',
+        'http://localhost:5000/api/user/order/checkout',
         {
           amount: totalAmount + shippingCost - discountAmount,
           orderInfo: "Order from A2K",

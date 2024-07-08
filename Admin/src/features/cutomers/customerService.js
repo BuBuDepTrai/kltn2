@@ -14,10 +14,11 @@ const getUsers = async () => {
   }
 };
 
-const blockUser = async (Id) => {
+const blockUser = async (Id, token) => {
   try {
-    const response = await axios.put(`${base_url}user/block-user/${Id}`, {
+    const response = await axios.put(`${base_url}user/block-user/${Id}`, "",{
       headers: {
+        Authorization: `Bearer ${token}`,
         "ngrok-skip-browser-warning": "69420"
       }
     });
@@ -28,10 +29,11 @@ const blockUser = async (Id) => {
   }
 };
 
-const unblockUser = async (Id) => {
+const unblockUser = async (Id, token) => {
   try {
-    const response = await axios.put(`${base_url}user/unblock-user/${Id}`, {
+    const response = await axios.put(`${base_url}user/unblock-user/${Id}`, "", {
       headers: {
+        Authorization: `Bearer ${token}`,
         "ngrok-skip-browser-warning": "69420"
       }
     });
@@ -45,7 +47,7 @@ const unblockUser = async (Id) => {
 const updateUser = async (data, token) => {
   try {
     const response = await axios.put(
-      `${base_url}user/edit-user`,
+      `${base_url}user/edit-user/${data.key}`,
       data,
       {
         headers: {
