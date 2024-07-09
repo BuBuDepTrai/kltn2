@@ -1,10 +1,11 @@
 # Khoá luận tốt nghiệp - chuyên ngành Công nghệ phần mềm
 - Đề tài: **TÌM HIỂU CÔNG NGHỆ MERN STACK X Y DỰNG WEBSITE BÁN THIẾT BỊ DI ĐỘNG**
 - Giáo viên hướng dẫn: TS. MAI ANH THƠ
-- Sinh viên:
-  -Nguyễn Trúc An	 -   20110087
-  -Nguyễn Hoàng Kha  -   20110500
-  -Nguyễn Tuấn Kiệt 	 -   20110510
+
+ - Sinh viên:
+ # -Nguyễn Trúc An	 -   20110087
+ # -Nguyễn Hoàng Kha  -   20110500
+ # -Nguyễn Tuấn Kiệt 	 -   20110510
 
 
 ## Hướng dẫn cài đặt
@@ -31,8 +32,7 @@
 	|VNPAY_URL             |✔       |VNPay Url                                                                                 |                |
 
 - Có thể tạo file `.env` trong thư mục backend với nội dung như sau:
-	```
-PORT = 5000
+```PORT = 5000
 MONGODB_URL = "mongodb+srv://tuankiet:kiet0910@cluster0.p7twmyv.mongodb.net/kltn"
 JWT_SECRET = "2FxXT1NTf2K1Mo4i6AOvtdI"
 JWT_EXPIRES = 1d
@@ -47,7 +47,7 @@ STRIPE_SECRET_KEY = 'sk_test_51OwUzZRppEdMsaprLv83kGblqXrK6rslqw4RqKFtAtESdAVfb2
 CLOUD_NAME = "do8jmw60o"
 API_KEY = "855599345713314"
 SECRET_KEY = "8cdJ7hgkf3sbWTfPX9sfMA8cKA8"
-	```
+```
 - Dùng lệnh sau để chạy server ở môi trường production.
     #### `npm start`
 
