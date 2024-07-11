@@ -4,40 +4,25 @@ import Meta from "../components/Meta";
 import BlogCard from "../components/BlogCard";
 import Container from "../components/Container";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllBlogs, getBlogCategories } from "../features/blogs/blogSlice";
+import { getAllBlogs as fetchAllBlogs, getBlogCategories } from "../features/blogs/blogSlice";
 import moment from "moment";
 
 const Blog = () => {
-  const blogState = useSelector((state) => state?.blog?.blog);
-  const categoryState = useSelector((state) => state?.blog?.blog);
-
-
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  //const [categoryState, setCategoryState] = useState("")
-
   const dispatch = useDispatch();
+  const blogState = useSelector((state) => state?.blog?.blog || []);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
-    getBlogs();
-    getCategories();
-    
-    // blogState?.map((item) => {
-    //   console.log(item.category)
-    //   setCategoryState(item.category)
-    // })
-    console.log("check", blogState.category)
-  }, []);
+    if (Array.isArray(blogState)) {
+      let categoryList = blogState.map((element) => element.category);
+      setCategories(categoryList);
+    }
+  }, [blogState]);
 
-  const getBlogs = () => {
-    dispatch(getAllBlogs());
-  };
-
-  const getCategories = () => {
-    dispatch(getBlogCategories());
-  };
-
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-  };
+  useEffect(() => {
+    dispatch(fetchAllBlogs({ category: selectedCategory }));
+  }, [selectedCategory, dispatch]);
 
   const filteredBlogs = selectedCategory
     ? blogState.filter((blog) => blog.category === selectedCategory)
@@ -54,11 +39,18 @@ const Blog = () => {
               <h3 className="filter-title">Find By Categories</h3>
               <div>
                 <ul className="ps-0">
-                  <li onClick={() => handleCategoryClick(null)}>All</li>
-                  {categoryState &&
-                    categoryState.map((category, index) => (
-                      <li key={index} onClick={() => handleCategoryClick(category)}>
-                        {category.category}
+                  <li
+                    className="ps-0"
+                    style={{ color: "var(--color-777777)" }}
+                    onClick={() => setSelectedCategory(null)}
+                  >
+                    All
+                  </li>
+
+                  {categories &&
+                    [...new Set(categories)].map((item, index) => (
+                      <li key={index} onClick={() => setSelectedCategory(item)}>
+                        {item}
                       </li>
                     ))}
                 </ul>

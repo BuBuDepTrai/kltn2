@@ -583,7 +583,7 @@ const Checkout = () => {
                   className="button mt-2"
                   onClick={() => setShowModal(true)}
                 >
-                  Chọn mã giảm giá
+                  Select Discount Code
                 </button>
               </div>
             </div>

@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { getOrders, updateAOrder } from "../features/auth/authSlice";
 
@@ -28,32 +26,44 @@ const columns = [
     dataIndex: "date",
   },
   {
+    title: "Payment Method",
+    dataIndex: "paymentMethod",
+  },
+  {
+    title: "Order Status",
+    dataIndex: "orderStatus",
+  },
+  {
     title: "Action",
     dataIndex: "action",
   },
 ];
 
 const getTokenFromLocalStorage = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
-    : null;
+  ? JSON.parse(localStorage.getItem("user"))
+  : null;
 
-  const config3 = {
-    headers: {
-      Authorization: `Bearer ${
-        getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
-      }`,
-      Accept: "application/json",
-      "ngrok-skip-browser-warning": "69420"
-    },
-  };
+const config3 = {
+  headers: {
+    Authorization: `Bearer ${
+      getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""
+    }`,
+    Accept: "application/json",
+    "ngrok-skip-browser-warning": "69420",
+  },
+};
 
 const Orders = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getOrders(config3));
-  }, []);
-  
-  const orderState = useSelector((state) => state?.auth?.orders.orders);
+  }, [dispatch]);
+
+  const orderState = useSelector((state) => state?.auth?.orders?.orders);
+
+  const updateOrderStatus = (orderId, status) => {
+    dispatch(updateAOrder({ id: orderId, status: status }));
+  };
 
   const data1 = [];
   for (let i = 0; i < orderState?.length; i++) {
@@ -65,6 +75,8 @@ const Orders = () => {
       ),
       amount: orderState[i]?.totalPrice,
       date: new Date(orderState[i]?.createdAt).toLocaleString(),
+      paymentMethod: orderState[i]?.paymentMethod,
+      orderStatus: orderState[i]?.orderStatus,
       action: (
         <>
           <select
@@ -76,24 +88,19 @@ const Orders = () => {
             className="form-control form-select"
             id=""
           >
-            <option value="Ordered" disabled selected>
+            <option value="Ordered" disabled>
               Ordered
             </option>
             <option value="Processed">Processed</option>
             <option value="Shipped">Shipped</option>
             <option value="Out for Delivery">Out for Delivery</option>
             <option value="Delivered">Delivered</option>
-            {/* Add a Cancel option */}
             <option value="Cancelled">Cancelled</option>
           </select>
         </>
       ),
     });
   }
-
-  const updateOrderStatus = (orderId, status) => {
-    dispatch(updateAOrder({ id: orderId, status: status }));
-  };
 
   return (
     <div>

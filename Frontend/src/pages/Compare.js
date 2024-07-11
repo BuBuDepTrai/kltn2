@@ -28,21 +28,13 @@ const Compare = () => {
               ))}
             </tr>
             <tr>
-              <td>Màu sắc</td>
+              <td>Hình ảnh</td>
               {compareList.map((product) => (
                 <td key={product._id}>
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "20px",
-                      height: "20px",
-                      backgroundColor: product.color,
-                      borderRadius: "50%",
-                      marginRight: "10px",
-                      verticalAlign: "middle",
-                    }}
-                  ></div>
-                  {product.color}
+                  <img
+                    src={product?.images[0]?.url}
+                    style={{ width: "300px", height: "200px" }}
+                  />
                 </td>
               ))}
             </tr>
