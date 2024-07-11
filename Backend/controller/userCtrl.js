@@ -365,7 +365,7 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
 
     await user.save();
     console.log(token);
-    const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='https://a2kshopfe.vercel.app/reset-password/${token}'>Click Here</>`;
+    const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='https://a2kshopfe.vercel.appg/reset-password/${token}'>Click Here</>`;
 
     const data = {
       to: email,
