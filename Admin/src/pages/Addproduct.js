@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import CustomInput from "../components/CustomInput";
 import ReactQuill from "react-quill";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link,useLocation, useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import * as yup from "yup";
@@ -39,12 +39,13 @@ const Addproduct = () => {
   const getProductId = location.pathname.split("/")[3];
   const navigate = useNavigate();
   const [color, setColor] = useState([]);
-
+  const [images, setImages] = useState([]);
+  console.log(color);
   useEffect(() => {
     dispatch(getBrands());
     dispatch(getCategories());
     dispatch(getColors());
-  }, [dispatch]);
+  }, []);
 
   const brandState = useSelector((state) => state.brand.brands);
   const catState = useSelector((state) => state.pCategory.pCategories);
@@ -74,18 +75,19 @@ const Addproduct = () => {
     } else {
       dispatch(resetState());
     }
-  }, [getProductId, dispatch]);
+  }, [getProductId]);
   useEffect(() => {
     if (isSuccess && createdProduct) {
       toast.success("Product Added Successfullly!");
     }
     if (isSuccess && updatedProduct) {
       toast.success("Product Updated Successfullly!");
+      navigate("/admin/list-product");
     }
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading, createdProduct, updatedProduct]);
+  }, [isSuccess, isError, isLoading]);
   const coloropt = [];
   colorState.forEach((i) => {
     coloropt.push({
@@ -132,6 +134,14 @@ const Addproduct = () => {
     });
   });
 
+  const img = [];
+  imgState?.forEach((i) => {
+    img.push({
+      public_id: i.public_id,
+      url: i.url,
+    });
+  });
+
   const imgshow = [];
   productImages?.forEach((i) => {
     imgshow.push({
@@ -140,15 +150,11 @@ const Addproduct = () => {
     });
   });
 
-
   useEffect(() => {
     formik.values.color = color ? color : " ";
-    //formik.values.images = img;
-  }, [color]);
-
+    formik.values.images = img;
+  }, [color, img]);
   const formik = useFormik({
-    enableReinitialize: true,
-    enableReinitialize: true,
     initialValues: {
       title: productName || "",
       description: productDesc || "",
@@ -156,9 +162,9 @@ const Addproduct = () => {
       brand: productBrand || "",
       category: productCategory || "",
       tags: productTag || "",
-      color: productColors || [],
+      color: productColors || "",
       quantity: productQuantity || "",
-      images: productImages || [],
+      images: productImages || "",
     },
     validationSchema: schema,
     onSubmit: (values) => {
@@ -166,22 +172,19 @@ const Addproduct = () => {
       if (getProductId !== undefined) {
         const data = { id: getProductId, productData: values };
         dispatch(updateAProduct(data));
-        setTimeout(() => {
-          navigate('/admin/list-product')
-        }, 1000)
       } else {
         dispatch(createProducts(values));
         formik.resetForm();
+        setColor(null);
+        setTimeout(() => {
+          dispatch(resetState());
+        }, 3000);
       }
-      setTimeout(() => {
-        setColor(null)
-        dispatch(resetState());
-        navigate('/admin/list-product');
-      }, 1000);
     },
   });
   const handleColors = (e) => {
     setColor(e);
+    console.log(color);
   };
 
   return (
@@ -326,7 +329,7 @@ const Addproduct = () => {
             </Dropzone>
           </div>
           <div className="showimages d-flex flex-wrap gap-3">
-            {imgState?.map((i, j) => {
+            {imgshow?.map((i, j) => {
               return (
                 <div className=" position-relative" key={j}>
                   <button
@@ -339,7 +342,7 @@ const Addproduct = () => {
                 </div>
               );
             })}
-            {imgshow?.map((i, j) => {
+            {imgState?.map((i, j) => {
               return (
                 <div className=" position-relative" key={j}>
                   <button
