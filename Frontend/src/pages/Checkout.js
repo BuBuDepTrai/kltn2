@@ -427,7 +427,7 @@ const Checkout = () => {
                       <BiArrowBack className="me-2" />
                       Return to Cart
                     </Link>
-                    <Link to="/cart" className="button">
+                    <Link to="/product" className="button">
                       Continue to Shipping
                     </Link>
                     <button className="button" type="submit">
