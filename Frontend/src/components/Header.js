@@ -208,31 +208,16 @@ const Header = () => {
               <div className="menu-bottom d-flex align-items-center gap-30">
                 <div>
                   <div className="dropdown">
-                    <button
-                      className="btn btn-secondary dropdown-toggle bg-transparent border-0 gap-15 d-flex align-items-center"
-                      type="button"
+                    <div
+                      className="btn btn-secondary bg-transparent border-0 gap-15 d-flex align-items-center"
                       id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
                     >
                       <img src={menu} alt="" />
                       <span className="me-5 d-inline-block">
-                        Shop Categories
+                        A2K SHOP
                       </span>
-                    </button>
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton1"
-                    >
-                      {categories &&
-                    [...new Set(categories)].map((item, index) => {
-                      return (
-                        <li key={index} onClick={() => setCategory(item)}>
-                          {item}
-                        </li>
-                      );
-                    })}
-                    </ul>
+                    </div>
+          
                   </div>
                 </div>
                 <div className="menu-links">
