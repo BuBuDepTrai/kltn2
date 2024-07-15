@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const querystring = require("qs");
 const Order = require("../models/orderModel");
+const Product = require("../models/productModel");
 const {
   vnp_TmnCode,
   vnp_HashSecret,
@@ -55,6 +56,19 @@ const checkout = async (req, res) => {
 
     const savedOrder = await newOrder.save();
     // console.log("Order saved:", savedOrder);
+    // Update product quantities and sold count
+    for (let item of orderItems) {
+      const product = await Product.findById(item.product);
+      if (product) {
+        product.quantity -= item.quantity;
+        product.sold = (product.sold || 0) + item.quantity;
+        if (product.quantity <= 0) {
+          await Product.findByIdAndDelete(product._id);
+        } else {
+          await product.save();
+        }
+      }
+    }
 
     if (paymentMethod === "COD") {
       res.json({
