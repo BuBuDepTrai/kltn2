@@ -50,6 +50,8 @@ const SingleProduct = () => {
   const uploadCart = () => {
     if (color === null) {
       toast.error("Please choose Color");
+    } else if (quantity > productState?.quantity) {
+      toast.error("Selected quantity exceeds available stock");
     } else {
       dispatch(
         addProdToCart({
@@ -258,11 +260,10 @@ const SingleProduct = () => {
                 </div>
                 <div className="d-flex gap-10 align-items-center my-2">
                   <h3 className="product-heading">Availability :</h3>
-                  <p className="product-data">In Stock</p>
+                  <p className="product-data">{productState?.quantity}</p>
                 </div>
                 {alreadyAdded === false && (
                   <div className="d-flex gap-10 flex-column mt-2 mb-3">
-                    <h3 className="product-heading">Color :</h3>
                     <Color
                       setColor={setColor}
                       colorData={productState?.color}
