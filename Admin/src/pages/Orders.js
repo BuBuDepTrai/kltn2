@@ -10,14 +10,17 @@ const columns = [
   {
     title: "SNo",
     dataIndex: "key",
+    sorter: (a, b) => a.key - b.key,
   },
   {
     title: "Name",
     dataIndex: "name",
+    sorter: (a, b) => a.name.localeCompare(b.name),
   },
   {
     title: "Product",
     dataIndex: "product",
+    sorter: (a, b) => a.amount - b.amount,
   },
   {
     title: "Amount",
@@ -26,6 +29,7 @@ const columns = [
   {
     title: "Date",
     dataIndex: "date",
+    sorter: (a, b) => new Date(a.date) - new Date(b.date),
   },
   {
     title: "Payment Method",
@@ -34,6 +38,7 @@ const columns = [
   {
     title: "Order Status",
     dataIndex: "orderStatus",
+    sorter: (a, b) => a.orderStatus.localeCompare(b.orderStatus),
   },
   {
     title: "Action",

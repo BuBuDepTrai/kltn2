@@ -504,7 +504,9 @@ const Checkout = () => {
                       }
                     />
                     <label className="form-check-label" htmlFor="economy">
-                      Economy (15,000₫)
+                      Economy: 15,000₫
+                      (HCM: 4 - 7 days / Nationwide: 7 - 10 days)
+                      
                     </label>
                   </div>
                   <div className="form-check">
@@ -520,7 +522,8 @@ const Checkout = () => {
                       }
                     />
                     <label className="form-check-label" htmlFor="standard">
-                      Standard (30,000₫)
+                      Standard: 30,000₫
+                      (HCM: 2 - 3 days / Nationwide: 5 - 7 days)
                     </label>
                   </div>
                   <div className="form-check">
@@ -536,7 +539,8 @@ const Checkout = () => {
                       }
                     />
                     <label className="form-check-label" htmlFor="express">
-                      Express (60,000₫)
+                      Express: 60,000₫
+                      (HCM: 24 hours / Nationwide: 2 - 3 days)
                     </label>
                   </div>
                 </div>

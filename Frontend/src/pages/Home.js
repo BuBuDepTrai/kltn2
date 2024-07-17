@@ -56,9 +56,9 @@ const Home = () => {
               />
               <div className="main-banner-content position-absolute">
                 <h4>SUPERCHARGED FOR PROS.</h4>
-                <h5>iPad S13+ Pro.</h5>
-                <p>From 9.000.000đ </p>
-                <Link to="/product?category=dt" className="button">BUY NOW</Link>
+                <h5>Samsung Galaxy</h5>
+                <p>From 11.000.000đ </p>
+                <Link to="/product/66938d26674dec6deea077b6" className="button">BUY NOW</Link>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@ const Home = () => {
                 />
                 <div className="small-banner-content position-absolute">
                   <h4>NEW ARRIVAL</h4>
-                  <h5>But IPad Air</h5>
+                  <h5> IPad Air</h5>
                   <p>
                     From  21.625.000đ <br />
                   </p>
@@ -100,7 +100,7 @@ const Home = () => {
                 />
                 <div className="small-banner-content position-absolute">
                   <h4>NEW ARRIVAL</h4>
-                  <h5>But IPad Air</h5>
+                  <h5>IPad Air</h5>
                   <p>
                     From  14.900.000đ <br />
                   </p>
@@ -114,7 +114,7 @@ const Home = () => {
                 />
                 <div className="small-banner-content position-absolute">
                   <h4>NEW ARRIVAL</h4>
-                  <h5>But Headphone</h5>
+                  <h5>Headphone</h5>
                   <p>
                     From Rs. 1.000.000đ <br />
                   </p>

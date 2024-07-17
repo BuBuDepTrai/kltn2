@@ -307,24 +307,14 @@ const SingleProduct = () => {
                 </div>
                 <div className="d-flex align-items-center gap-15">
                   <div>
-                    {isFilled ? (
-                      <AiFillHeart
-                        className="fs-5 me-2"
-                        onClick={handleToggle}
-                      />
-                    ) : (
-                      <AiOutlineHeart
-                        className="fs-5 me-2"
-                        onClick={handleToggle}
-                      />
-                    )}
+                    
                   </div>
                 </div>
                 <div className="d-flex gap-10 flex-column  my-3">
                   <h3 className="product-heading">Shipping & Returns :</h3>
                   <p className="product-data">
                     Free shipping and returns available on all orders! <br /> We
-                    ship all India domestic orders within
+                    ship all VietNam domestic orders within
                     <b> 5-10 business days!</b>
                   </p>
                 </div>

@@ -245,6 +245,7 @@ const Orders = () => {
                           <div style={styles.detailSection}>
                             <h5>Thông tin vận chuyển</h5>
                             <p>Tình trạng: {item.orderStatus}</p>
+                            <h6 style={{color: "red"}}>If you have a request to cancel an order. Please contact an advisor !!!</h6>
                           </div>
                           <div style={styles.detailSection}>
                             <h5>Thông tin người nhận</h5>

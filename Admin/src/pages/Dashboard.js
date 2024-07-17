@@ -115,12 +115,14 @@ const Dashboard = () => {
     setOrderData(data1);
   }, [monthlyDataState, yearlyDataState]);
 
+  const colors = ['#ffd333', '#ff6347', '#4682b4', '#32cd32', '#ffa07a', '#6a5acd', '#ff69b4', '#20b2aa', '#ffb6c1', '#87cefa'];
+
   const config = {
     data: dataMonthly,
     xField: "type",
     yField: "income",
     color: ({ type }) => {
-      return "#ffd333";
+      return colors[Math.floor(Math.random() * colors.length)];
     },
     label: {
       position: "middle",
@@ -150,7 +152,7 @@ const Dashboard = () => {
     xField: "type",
     yField: "income",
     color: ({ type }) => {
-      return "#ffd333";
+      return colors[Math.floor(Math.random() * colors.length)];
     },
     label: {
       position: "middle",
@@ -183,9 +185,8 @@ const Dashboard = () => {
           <div>
             <p className="desc">Total Income</p>
             <h4 className="mb-0 sub-title">
-  {yearlyDataState && yearlyDataState[0]?.amount ? (yearlyDataState[0].amount * 300).toLocaleString('vi-VN') : 0}₫
-</h4>
-
+              {yearlyDataState && yearlyDataState[0]?.amount ? (yearlyDataState[0].amount * 300).toLocaleString('vi-VN') : 0}₫
+            </h4>
           </div>
           <div className="d-flex flex-column align-items-end">
             <p className="mb-0  desc">Income in Last Year from Today</p>
