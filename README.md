@@ -1,5 +1,5 @@
 # Khoá luận tốt nghiệp - chuyên ngành Công nghệ phần mềm
-- Đề tài: **TÌM HIỂU CÔNG NGHỆ MERN STACK X Y DỰNG WEBSITE BÁN THIẾT BỊ DI ĐỘNG**
+- Đề tài: **TÌM HIỂU CÔNG NGHỆ MERN STACK XÂY DỰNG WEBSITE BÁN THIẾT BỊ DI ĐỘNG**
 - Giáo viên hướng dẫn: TS. MAI ANH THƠ
 
  - Sinh viên:
